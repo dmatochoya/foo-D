@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Navbar(): JSX.Element {
+const Navbar = React.memo((): JSX.Element => {
   const navbarIcons = ['home', 'search', 'list', 'person', 'calendar'];
   return (
     <View style={styles.navbarContainer}>
@@ -25,4 +25,6 @@ export default function Navbar(): JSX.Element {
       ))}
     </View>
   );
-}
+});
+
+export default Navbar;

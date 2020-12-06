@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { deleteProductFromGorceryList, deleteAllProductsFromGorceryList } from '../../redux/actions/groceryListActions';
 import AddIngredientBoxInput from './TextInput';
+import Navbar from '../Navbar/Navbar';
 
 const styles = StyleSheet.create({
   header: {
@@ -171,42 +172,45 @@ function List({ groceryList, actions } : Props) {
   );
 
   return (
-    <View style={{ marginTop: StatusBar.currentHeight, flex: 1 }}>
-      <StatusBar backgroundColor="black" barStyle="light-content" translucent />
-      <View style={styles.header}>
-        <View style={styles.headerTitleAndIconContainer}>
-          <Text style={{ color: 'white', fontSize: 25, paddingVertical: 10 }}>
-            Grocery list
-          </Text>
-          <Icon
-            size={30}
-            color="white"
-            name="md-trash"
-            type="ionicon"
-            onPress={() => {
-              if (groceryList.length) {
-                deleteAllItemsAlert();
-              }
-            }}
-          />
+    <>
+      <View style={{ marginTop: StatusBar.currentHeight, flex: 1 }}>
+        <StatusBar backgroundColor="black" barStyle="light-content" translucent />
+        <View style={styles.header}>
+          <View style={styles.headerTitleAndIconContainer}>
+            <Text style={{ color: 'white', fontSize: 25, paddingVertical: 10 }}>
+              Grocery list
+            </Text>
+            <Icon
+              size={30}
+              color="white"
+              name="md-trash"
+              type="ionicon"
+              onPress={() => {
+                if (groceryList.length) {
+                  deleteAllItemsAlert();
+                }
+              }}
+            />
 
+          </View>
+          <View style={styles.inputBox}>
+            <AddIngredientBoxInput searchBoxRef={searchBoxRef} />
+          </View>
         </View>
-        <View style={styles.inputBox}>
-          <AddIngredientBoxInput searchBoxRef={searchBoxRef} />
-        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {groceryList.length
+            ? <View style={{ marginBottom: 60 }}>{groceryListJSX}</View>
+            : (
+              <View style={{ height: height - 169, justifyContent: 'center' }}>
+                <Text style={{ fontSize: 20, textAlign: 'center' }}>
+                  No items yet
+                </Text>
+              </View>
+            )}
+        </ScrollView>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {groceryList.length
-          ? <View style={{ marginBottom: 60 }}>{groceryListJSX}</View>
-          : (
-            <View style={{ height: height - 169, justifyContent: 'center' }}>
-              <Text style={{ fontSize: 20, textAlign: 'center' }}>
-                No items yet
-              </Text>
-            </View>
-          )}
-      </ScrollView>
-    </View>
+      <Navbar />
+    </>
   );
 }
 

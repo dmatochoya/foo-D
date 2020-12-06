@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getRecipeFromAPI } from '../../redux/actions/recipesActions';
+import Navbar from '../Navbar/Navbar';
 
 const styles = StyleSheet.create({
   header: {
@@ -54,6 +55,7 @@ interface Props {
 }
 
 function Home({ recipes, actions, navigation }: Props) {
+  console.ignoredYellowBox = ['Setting a timer'];
   const { height } = Dimensions.get('window');
   const recipePhotoHeight = +(height - 114).toFixed();
   const linearGradientBoxHeight = height - 280;
@@ -111,36 +113,39 @@ function Home({ recipes, actions, navigation }: Props) {
   }, []);
 
   return (
-    <View style={{ marginTop: StatusBar.currentHeight }} testID="test">
-      <StatusBar backgroundColor="black" barStyle="light-content" translucent />
-      <View style={styles.header}>
-        <Text style={{ color: 'white', fontSize: 25 }}>
-          Recipes
-        </Text>
+    <>
+      <View style={{ marginTop: StatusBar.currentHeight }} testID="test">
+        <StatusBar backgroundColor="black" barStyle="light-content" translucent />
+        <View style={styles.header}>
+          <Text style={{ color: 'white', fontSize: 25 }}>
+            Recipes
+          </Text>
+        </View>
+        <ScrollView
+          pagingEnabled
+          decelerationRate={0}
+          snapToInterval={recipePhotoHeight}
+          snapToAlignment="center"
+          showsVerticalScrollIndicator={false}
+          onScroll={(event) => {
+            if (event.nativeEvent.contentOffset.y > scrollViewContentOffsetY) {
+              goingDown = true;
+            } else {
+              goingDown = false;
+            }
+            scrollViewContentOffsetY = event.nativeEvent.contentOffset.y;
+          }}
+          onScrollEndDrag={() => {
+            if (goingDown) {
+              actions.getRecipeFromAPI();
+            }
+          }}
+        >
+          {recipesJSX}
+        </ScrollView>
       </View>
-      <ScrollView
-        pagingEnabled
-        decelerationRate={0}
-        snapToInterval={recipePhotoHeight}
-        snapToAlignment="center"
-        showsVerticalScrollIndicator={false}
-        onScroll={(event) => {
-          if (event.nativeEvent.contentOffset.y > scrollViewContentOffsetY) {
-            goingDown = true;
-          } else {
-            goingDown = false;
-          }
-          scrollViewContentOffsetY = event.nativeEvent.contentOffset.y;
-        }}
-        onScrollEndDrag={() => {
-          if (goingDown) {
-            actions.getRecipeFromAPI();
-          }
-        }}
-      >
-        {recipesJSX}
-      </ScrollView>
-    </View>
+      <Navbar />
+    </>
   );
 }
 

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getRecipeByNameFromAPI } from '../../redux/actions/recipesActions';
+import Navbar from '../Navbar/Navbar';
 
 const styles = StyleSheet.create({
   header: {
@@ -130,40 +131,43 @@ function Category({
   }, [Object.keys(recipes).length]);
 
   return (
-    <View style={{ marginTop: StatusBar.currentHeight }}>
-      <StatusBar backgroundColor="black" barStyle="light-content" translucent />
-      <View style={styles.header}>
-        <Text style={{ color: 'white', fontSize: 25 }}>
-          {`${categoryName} category`}
-        </Text>
-      </View>
-      <ScrollView
-        pagingEnabled
-        decelerationRate={0}
-        snapToInterval={recipePhotoHeight}
-        snapToAlignment="center"
-        showsVerticalScrollIndicator={false}
-        onScroll={(event) => {
-          if (event.nativeEvent.contentOffset.y > scrollViewContentOffsetY) {
-            goingDown = true;
-          } else {
-            goingDown = false;
-          }
-          scrollViewContentOffsetY = event.nativeEvent.contentOffset.y;
-        }}
-        onScrollEndDrag={() => {
-          if (goingDown) {
-            if (recipes.meals.length <= categoryRecipeIndex) {
-              categoryRecipeIndex = 0;
+    <>
+      <View style={{ marginTop: StatusBar.currentHeight }}>
+        <StatusBar backgroundColor="black" barStyle="light-content" translucent />
+        <View style={styles.header}>
+          <Text style={{ color: 'white', fontSize: 25 }}>
+            {`${categoryName} category`}
+          </Text>
+        </View>
+        <ScrollView
+          pagingEnabled
+          decelerationRate={0}
+          snapToInterval={recipePhotoHeight}
+          snapToAlignment="center"
+          showsVerticalScrollIndicator={false}
+          onScroll={(event) => {
+            if (event.nativeEvent.contentOffset.y > scrollViewContentOffsetY) {
+              goingDown = true;
+            } else {
+              goingDown = false;
             }
-            actions.getRecipeByNameFromAPI(recipes.meals[categoryRecipeIndex].strMeal, true);
-            categoryRecipeIndex += 1;
-          }
-        }}
-      >
-        {recipesJSX.length ? recipesJSX : <ActivityIndicator color="black" style={{ marginTop: height / 2 - 30 }} size={60} />}
-      </ScrollView>
-    </View>
+            scrollViewContentOffsetY = event.nativeEvent.contentOffset.y;
+          }}
+          onScrollEndDrag={() => {
+            if (goingDown) {
+              if (recipes.meals.length <= categoryRecipeIndex) {
+                categoryRecipeIndex = 0;
+              }
+              actions.getRecipeByNameFromAPI(recipes.meals[categoryRecipeIndex].strMeal, true);
+              categoryRecipeIndex += 1;
+            }
+          }}
+        >
+          {recipesJSX.length ? recipesJSX : <ActivityIndicator color="black" style={{ marginTop: height / 2 - 30 }} size={60} />}
+        </ScrollView>
+      </View>
+      <Navbar />
+    </>
   );
 }
 

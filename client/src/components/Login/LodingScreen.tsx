@@ -1,0 +1,51 @@
+import React, { useEffect } from 'react';
+import {
+  StyleSheet, View, ActivityIndicator, StatusBar, AsyncStorage,
+} from 'react-native';
+import firebase from 'firebase';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import isUserLoggedIn from '../../redux/actions/userActions';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+function LoadingScreen({ navigation, actions }) {
+  const checkIfLoggedIn = () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        actions.isUserLoggedIn(true);
+        navigation.navigate('home');
+      } else {
+        navigation.navigate('loginScreen');
+      }
+    });
+  };
+
+  useEffect(() => {
+    checkIfLoggedIn();
+  }, []);
+  return (
+    <>
+      <StatusBar backgroundColor="black" barStyle="light-content" translucent />
+      <View style={styles.container}>
+        <ActivityIndicator size={60} color="black" />
+      </View>
+    </>
+  );
+}
+
+function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
+  return {
+    actions: bindActionCreators({
+      isUserLoggedIn,
+    }, dispatch),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(LoadingScreen);
