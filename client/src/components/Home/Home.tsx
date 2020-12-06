@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getRecipeFromAPI } from '../../redux/actions/recipesActions';
-import Navbar from '../Navbar/Navbar';
 
 const styles = StyleSheet.create({
   header: {

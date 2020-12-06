@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { deleteProductFromGorceryList, deleteAllProductsFromGorceryList, crossOverProductFromGorceryList } from '../../redux/actions/groceryListActions';
 import AddIngredientBoxInput from './TextInput';
-import Navbar from '../Navbar/Navbar';
 
 const styles = StyleSheet.create({
   header: {

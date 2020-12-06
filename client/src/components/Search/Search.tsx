@@ -11,7 +11,6 @@ import {
   getCategoryRecipesFromAPI, restoreCategoryRecipeByNameReducer, restoreCategoryRecipesReducer,
 } from '../../redux/actions/recipesActions';
 import SearchBoxInput from './TextInput';
-import Navbar from '../Navbar/Navbar';
 
 const styles = StyleSheet.create({
   header: {
