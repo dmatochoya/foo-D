@@ -22,5 +22,5 @@ app.use('/recipes', recipesRoutes);
 app.use('/list', groceryListRoutes);
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server's running on port ${port}`);
 });
