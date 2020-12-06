@@ -9,6 +9,8 @@ import Detail from './src/components/Detail/Detail';
 import Search from './src/components/Search/Search';
 import Category from './src/components/Category/Category';
 import List from './src/components/List/List';
+import User from './src/components/User/User';
+import Calendar from './src/components/Calendar/Calendar';
 import Navbar from './src/components/Navbar/Navbar';
 import { navigationRef } from './RootNavigation';
 
@@ -19,13 +21,21 @@ function Navigation({ user } : { user: boolean }) {
     <>
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator>
-          <Stack.Screen name="lodingScreen" component={LodingScreen} options={{ headerShown: false, navigationBarHidden: true }} />
-          <Stack.Screen name="loginScreen" component={LoginScreen} options={{ headerShown: false }} />
+          {!user
+            ? (
+              <>
+                <Stack.Screen name="lodingScreen" component={LodingScreen} options={{ headerShown: false, navigationBarHidden: true }} />
+                <Stack.Screen name="loginScreen" component={LoginScreen} options={{ headerShown: false }} />
+              </>
+            )
+            : null}
           <Stack.Screen name="home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="detail" component={Detail} options={{ headerShown: false }} />
           <Stack.Screen name="search" component={Search} options={{ headerShown: false }} />
           <Stack.Screen name="category" component={Category} options={{ headerShown: false }} />
           <Stack.Screen name="list" component={List} options={{ headerShown: false }} />
+          <Stack.Screen name="person" component={User} options={{ headerShown: false }} />
+          <Stack.Screen name="calendar" component={Calendar} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
       {user ? <Navbar /> : null}

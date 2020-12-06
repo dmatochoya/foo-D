@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import {
   StyleSheet, View, Button, AsyncStorage,
 } from 'react-native';
 import * as Google from 'expo-google-app-auth';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import isUserLoggedIn from '../../redux/actions/userActions';
 
 const styles = StyleSheet.create({
@@ -16,11 +16,23 @@ const styles = StyleSheet.create({
   },
 });
 
-function LoginScreen({ actions }): JSX.Element {
-  function isUserEqual(googleUser, firebaseUser) {
+interface ProviderData {
+  providerId: string
+  uid: string
+}
+
+interface Firebase {
+  User: object
+  providerData: ProviderData[]
+}
+
+function LoginScreen({ actions } : { actions: Object}) {
+  function isUserEqual(googleUser:
+    { getBasicProfile: () => { (): any; new(): any; getId: { (): any; new(): any; }; }; },
+  firebaseUser: Firebase) {
     if (firebaseUser) {
       const { providerData } = firebaseUser;
-      for (let i = 0; i < providerData.length; i++) {
+      for (let i = 0; i < providerData.length; i += 1) {
         if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID
                 && providerData[i].uid === googleUser.getBasicProfile().getId()) {
           return true;
@@ -29,7 +41,7 @@ function LoginScreen({ actions }): JSX.Element {
     }
     return false;
   }
-  function onSignIn(googleUser) {
+  function onSignIn(googleUser: Object) {
     console.log('Google Auth Response', googleUser);
     const unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
       unsubscribe();
@@ -39,23 +51,31 @@ function LoginScreen({ actions }): JSX.Element {
           googleUser.accessToken,
         );
 
-        firebase.auth().signInWithCredential(credential).then((result) => {
-          firebase
-            .database()
-            .ref(`/users/${result.user.uid}`)
-            .set({
-              gmail: result.user.email,
-              profile_picture: result.additionalUserInfo.profile.picture,
-              locale: result.additionalUserInfo.profile.locale,
-              first_name: result.additionalUserInfo.profile.given_name,
-              last_name: result.additionalUserInfo.profile.family_name,
-            });
+        firebase.auth().signInWithCredential(credential).then((result: Object) => {
+          if (result.additionalUserInfo.isNewUser) {
+            firebase
+              .database()
+              .ref(`/users/${result.user.uid}`)
+              .set({
+                gmail: result.user.email,
+                profile_picture: result.additionalUserInfo.profile.picture,
+                locale: result.additionalUserInfo.profile.locale,
+                first_name: result.additionalUserInfo.profile.given_name,
+                last_name: result.additionalUserInfo.profile.family_name,
+                created_at: Date.now(),
+              });
+          } else {
+            firebase
+              .database()
+              .ref(`/users/${result.user.uid}`).update({
+                last_logged_in: Date.now(),
+              });
+          }
         }).then(() => actions.isUserLoggedIn(true))
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             const { email } = error;
-            const { credential } = error;
           });
       } else {
         console.log('User already signed-in Firebase.');

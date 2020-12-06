@@ -1,4 +1,3 @@
-import axios from 'axios';
 import actionTypes from './actionTypes';
 
 export default function isUserLoggedIn(user: boolean) {

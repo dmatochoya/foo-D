@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import isUserLoggedIn from '../../redux/actions/userActions';
 
 const styles = StyleSheet.create({
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function LoadingScreen({ navigation, actions }) {
+function LoadingScreen({ navigation, actions } : { navigation: Object, actions: Object}) {
   const checkIfLoggedIn = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {

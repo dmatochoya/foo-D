@@ -94,8 +94,8 @@ function List({ groceryList, actions } : Props) {
         listOrderedByFoodType[listItem.type].push(listItem.product);
       } else {
         listOrderedByFoodType[listItem.type] = [listItem.product];
-        sectionArrowDirectionObject[sectionNumber] = 'arrow-down';
-        sectionVisibilityObject[sectionNumber] = { display: 'flex' };
+        sectionArrowDirectionObject[listItem.type] = 'arrow-down';
+        sectionVisibilityObject[listItem.type] = { display: 'flex' };
         sectionNumber += 1;
       }
     });
@@ -112,22 +112,22 @@ function List({ groceryList, actions } : Props) {
             <View style={{ position: 'relative', top: 2 }}>
               <Icon
                 onPress={() => {
-                  if (sectionArrowDirection[sectionIndexNumber] === 'arrow-down' || !sectionArrowDirection[sectionIndexNumber]) {
-                    setSectionArrowDirection({ ...sectionArrowDirection, [sectionIndexNumber]: 'arrow-up' });
-                    setSectionVisibility({ ...sectionVisibility, [sectionIndexNumber]: { display: 'none' } });
+                  if (sectionArrowDirection[foodGroup[0]] === 'arrow-down' || !sectionArrowDirection[foodGroup[0]]) {
+                    setSectionArrowDirection({ ...sectionArrowDirection, [foodGroup[0]]: 'arrow-up' });
+                    setSectionVisibility({ ...sectionVisibility, [foodGroup[0]]: { display: 'none' } });
                   } else {
-                    setSectionArrowDirection({ ...sectionArrowDirection, [sectionIndexNumber]: 'arrow-down' });
-                    setSectionVisibility({ ...sectionVisibility, [sectionIndexNumber]: { display: 'flex' } });
+                    setSectionArrowDirection({ ...sectionArrowDirection, [foodGroup[0]]: 'arrow-down' });
+                    setSectionVisibility({ ...sectionVisibility, [foodGroup[0]]: { display: 'flex' } });
                   }
                 }}
                 size={25}
                 color="white"
-                name={sectionArrowDirection[sectionIndexNumber] ? `ios-${sectionArrowDirection[sectionIndexNumber]}` : 'ios-arrow-down'}
+                name={sectionArrowDirection[foodGroup[0]] ? `ios-${sectionArrowDirection[foodGroup[0]]}` : 'ios-arrow-down'}
                 type="ionicon"
               />
             </View>
           </View>
-          <View style={[sectionVisibility[sectionIndexNumber], { marginTop: 5 }]}>
+          <View style={[sectionVisibility[foodGroup[0]], { marginTop: 5 }]}>
             {foodGroup[1].map((foddGroupItem: string) => (
               <Swipeable
                 key={Math.random() * Date.now()}

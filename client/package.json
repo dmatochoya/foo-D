@@ -7,7 +7,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watch --collect-coverage --env=jsdom"
+    "test": "jest --watch --collect-coverage"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.2.1",
