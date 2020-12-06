@@ -9,7 +9,7 @@ import { Swipeable } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import { deleteProductFromGorceryList, deleteAllProductsFromGorceryList } from '../../redux/actions/groceryListActions';
+import { deleteProductFromGorceryList, deleteAllProductsFromGorceryList, crossOverProductFromGorceryList } from '../../redux/actions/groceryListActions';
 import AddIngredientBoxInput from './TextInput';
 import Navbar from '../Navbar/Navbar';
 
@@ -59,10 +59,11 @@ const styles = StyleSheet.create({
 interface Actions {
     deleteProductFromGorceryList(foodGroupItem: string): void
     deleteAllProductsFromGorceryList(): void
+    crossOverProductFromGorceryList(foodGroupItem: string, crossedOver: boolean): void
 }
 
 interface Props {
-  groceryList: object[]
+  groceryList: Object[]
   actions: Actions
 }
 
@@ -71,7 +72,6 @@ function List({ groceryList, actions } : Props) {
   const { width, height } = Dimensions.get('window');
   const [sectionArrowDirection, setSectionArrowDirection] = useState<Object>({});
   const [sectionVisibility, setSectionVisibility] = useState<Object>({});
-  const [ingredientCrossedOver, setIngredientCrossedOver] = useState<boolean>(false);
 
   const isFocused = useIsFocused();
 
@@ -86,23 +86,23 @@ function List({ groceryList, actions } : Props) {
   const listOrderedByFoodType: Object = {};
   const sectionArrowDirectionObject: Object = {};
   const sectionVisibilityObject: Object = {};
+  const ingredientCrossedOverObject: Object = {};
 
   const orderItemsByFoodType = () => {
-    let sectionNumber = 0;
     groceryList.forEach((listItem: Object) => {
       if (listItem.type in listOrderedByFoodType) {
         listOrderedByFoodType[listItem.type].push(listItem.product);
       } else {
+        ingredientCrossedOverObject[listItem.product] = false;
         listOrderedByFoodType[listItem.type] = [listItem.product];
         sectionArrowDirectionObject[listItem.type] = 'arrow-down';
         sectionVisibilityObject[listItem.type] = { display: 'flex' };
-        sectionNumber += 1;
       }
     });
   };
 
   const addItemsToList = () => {
-    Object.entries(listOrderedByFoodType).forEach((foodGroup, sectionIndexNumber) => {
+    Object.entries(listOrderedByFoodType).forEach((foodGroup) => {
       groceryListJSX.push(
         <View key={Math.random() * Date.now()}>
           <View style={styles.sectionTitleContainer}>
@@ -128,17 +128,17 @@ function List({ groceryList, actions } : Props) {
             </View>
           </View>
           <View style={[sectionVisibility[foodGroup[0]], { marginTop: 5 }]}>
-            {foodGroup[1].map((foddGroupItem: string) => (
+            {foodGroup[1].map((foodGroupItem: string) => (
               <Swipeable
                 key={Math.random() * Date.now()}
                 renderLeftActions={() => <View style={{ width }} />}
                 onSwipeableLeftOpen={() => {
-                  actions.deleteProductFromGorceryList(foddGroupItem);
+                  actions.deleteProductFromGorceryList(foodGroupItem);
                 }}
               >
                 <View style={styles.ingredientContainer}>
-                  <Text style={{ fontSize: 17, textDecorationLine: ingredientCrossedOver ? 'line-through' : 'none' }} onPress={() => setIngredientCrossedOver(!ingredientCrossedOver)} suppressHighlighting>
-                    {`${foddGroupItem[0].toUpperCase()}${foddGroupItem.slice(1)}`}
+                  <Text style={{ fontSize: 17, textDecorationLine: groceryList.find((product: Object) => product.product === foodGroupItem).isCrossed ? 'line-through' : 'none' }} onPress={() => actions.crossOverProductFromGorceryList({ name: foodGroupItem, crossedOver: !groceryList.find((product: Object) => product.product === foodGroupItem).isCrossed })} suppressHighlighting>
+                    {`${foodGroupItem[0].toUpperCase()}${foodGroupItem.slice(1)}`}
                   </Text>
                 </View>
               </Swipeable>
@@ -172,45 +172,42 @@ function List({ groceryList, actions } : Props) {
   );
 
   return (
-    <>
-      <View style={{ marginTop: StatusBar.currentHeight, flex: 1 }}>
-        <StatusBar backgroundColor="black" barStyle="light-content" translucent />
-        <View style={styles.header}>
-          <View style={styles.headerTitleAndIconContainer}>
-            <Text style={{ color: 'white', fontSize: 25, paddingVertical: 10 }}>
-              Grocery list
-            </Text>
-            <Icon
-              size={30}
-              color="white"
-              name="md-trash"
-              type="ionicon"
-              onPress={() => {
-                if (groceryList.length) {
-                  deleteAllItemsAlert();
-                }
-              }}
-            />
+    <View style={{ marginTop: StatusBar.currentHeight, flex: 1 }}>
+      <StatusBar backgroundColor="black" barStyle="light-content" translucent />
+      <View style={styles.header}>
+        <View style={styles.headerTitleAndIconContainer}>
+          <Text style={{ color: 'white', fontSize: 25, paddingVertical: 10 }}>
+            Grocery list
+          </Text>
+          <Icon
+            size={30}
+            color="white"
+            name="md-trash"
+            type="ionicon"
+            onPress={() => {
+              if (groceryList.length) {
+                deleteAllItemsAlert();
+              }
+            }}
+          />
 
-          </View>
-          <View style={styles.inputBox}>
-            <AddIngredientBoxInput searchBoxRef={searchBoxRef} />
-          </View>
         </View>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {groceryList.length
-            ? <View style={{ marginBottom: 60 }}>{groceryListJSX}</View>
-            : (
-              <View style={{ height: height - 169, justifyContent: 'center' }}>
-                <Text style={{ fontSize: 20, textAlign: 'center' }}>
-                  No items yet
-                </Text>
-              </View>
-            )}
-        </ScrollView>
+        <View style={styles.inputBox}>
+          <AddIngredientBoxInput searchBoxRef={searchBoxRef} />
+        </View>
       </View>
-      <Navbar />
-    </>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {groceryList.length
+          ? <View style={{ marginBottom: 60 }}>{groceryListJSX}</View>
+          : (
+            <View style={{ height: height - 169, justifyContent: 'center' }}>
+              <Text style={{ fontSize: 20, textAlign: 'center' }}>
+                No items yet
+              </Text>
+            </View>
+          )}
+      </ScrollView>
+    </View>
   );
 }
 
@@ -226,6 +223,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
     actions: bindActionCreators({
       deleteProductFromGorceryList,
       deleteAllProductsFromGorceryList,
+      crossOverProductFromGorceryList,
     }, dispatch),
   };
 }

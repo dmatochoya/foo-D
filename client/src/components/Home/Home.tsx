@@ -113,39 +113,36 @@ function Home({ recipes, actions, navigation }: Props) {
   }, []);
 
   return (
-    <>
-      <View style={{ marginTop: StatusBar.currentHeight }} testID="test">
-        <StatusBar backgroundColor="black" barStyle="light-content" translucent />
-        <View style={styles.header}>
-          <Text style={{ color: 'white', fontSize: 25 }}>
-            Recipes
-          </Text>
-        </View>
-        <ScrollView
-          pagingEnabled
-          decelerationRate={0}
-          snapToInterval={recipePhotoHeight}
-          snapToAlignment="center"
-          showsVerticalScrollIndicator={false}
-          onScroll={(event) => {
-            if (event.nativeEvent.contentOffset.y > scrollViewContentOffsetY) {
-              goingDown = true;
-            } else {
-              goingDown = false;
-            }
-            scrollViewContentOffsetY = event.nativeEvent.contentOffset.y;
-          }}
-          onScrollEndDrag={() => {
-            if (goingDown) {
-              actions.getRecipeFromAPI();
-            }
-          }}
-        >
-          {recipesJSX}
-        </ScrollView>
+    <View style={{ marginTop: StatusBar.currentHeight }} testID="test">
+      <StatusBar backgroundColor="black" barStyle="light-content" translucent />
+      <View style={styles.header}>
+        <Text style={{ color: 'white', fontSize: 25 }}>
+          Recipes
+        </Text>
       </View>
-      <Navbar />
-    </>
+      <ScrollView
+        pagingEnabled
+        decelerationRate={0}
+        snapToInterval={recipePhotoHeight}
+        snapToAlignment="center"
+        showsVerticalScrollIndicator={false}
+        onScroll={(event) => {
+          if (event.nativeEvent.contentOffset.y > scrollViewContentOffsetY) {
+            goingDown = true;
+          } else {
+            goingDown = false;
+          }
+          scrollViewContentOffsetY = event.nativeEvent.contentOffset.y;
+        }}
+        onScrollEndDrag={() => {
+          if (goingDown) {
+            actions.getRecipeFromAPI();
+          }
+        }}
+      >
+        {recipesJSX}
+      </ScrollView>
+    </View>
   );
 }
 

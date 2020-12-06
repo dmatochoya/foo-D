@@ -199,65 +199,62 @@ export default function Detail({
   addRecipeSteps();
 
   return (
-    <>
-      <View>
-        <StatusBar backgroundColor="black" barStyle="light-content" translucent />
-        <View style={[styles.header, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+    <View>
+      <StatusBar backgroundColor="black" barStyle="light-content" translucent />
+      <View style={[styles.header, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+        <Ionicons
+          size={45}
+          style={{ color: 'white' }}
+          name="ios-arrow-round-back"
+          type="ionicons"
+          onPress={() => goBack()}
+        />
+        <TouchableOpacity onPress={() => setHeartIconPressed(!heartIconPressed)} style={{ alignSelf: 'center' }}>
           <Ionicons
-            size={45}
+            size={30}
             style={{ color: 'white' }}
-            name="ios-arrow-round-back"
+            name={heartIconPressed ? 'md-heart' : 'md-heart-empty'}
             type="ionicons"
-            onPress={() => goBack()}
           />
-          <TouchableOpacity onPress={() => setHeartIconPressed(!heartIconPressed)} style={{ alignSelf: 'center' }}>
-            <Ionicons
-              size={30}
-              style={{ color: 'white' }}
-              name={heartIconPressed ? 'md-heart' : 'md-heart-empty'}
-              type="ionicons"
-            />
-          </TouchableOpacity>
-        </View>
-        <ScrollView style={{ marginBottom: 40 }} showsVerticalScrollIndicator={false}>
-          <View>
-            <Image style={{ height: height - 40 }} source={{ uri: recipePhotoUri }} />
-            <LinearGradient
-              colors={['transparent', 'rgb(250, 250, 250)']}
-              style={[styles.linearGradientBox, { top: linearGradientBoxHeight }]}
-            >
-              <Text style={styles.recipeName}>
-                {recipeName}
-              </Text>
-            </LinearGradient>
-          </View>
-          <View>
-            <Text style={styles.sectionTitle}>
-              Ingredients
-            </Text>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-              {ingredientsJSX}
-            </View>
-          </View>
-          <View style={{ paddingBottom: 20 }}>
-            <Text style={styles.sectionTitle}>
-              Steps
-            </Text>
-            <ScrollView
-              ref={scrollRef}
-              horizontal
-              pagingEnabled
-              decelerationRate={0}
-              snapToInterval={recipeStepWidth + 10.1}
-              snapToAlignment="center"
-              showsHorizontalScrollIndicator={false}
-            >
-              {stepsJSX}
-            </ScrollView>
-          </View>
-        </ScrollView>
+        </TouchableOpacity>
       </View>
-      <Navbar />
-    </>
+      <ScrollView style={{ marginBottom: 40 }} showsVerticalScrollIndicator={false}>
+        <View>
+          <Image style={{ height: height - 40 }} source={{ uri: recipePhotoUri }} />
+          <LinearGradient
+            colors={['transparent', 'rgb(250, 250, 250)']}
+            style={[styles.linearGradientBox, { top: linearGradientBoxHeight }]}
+          >
+            <Text style={styles.recipeName}>
+              {recipeName}
+            </Text>
+          </LinearGradient>
+        </View>
+        <View>
+          <Text style={styles.sectionTitle}>
+            Ingredients
+          </Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+            {ingredientsJSX}
+          </View>
+        </View>
+        <View style={{ paddingBottom: 20 }}>
+          <Text style={styles.sectionTitle}>
+            Steps
+          </Text>
+          <ScrollView
+            ref={scrollRef}
+            horizontal
+            pagingEnabled
+            decelerationRate={0}
+            snapToInterval={recipeStepWidth + 10.1}
+            snapToAlignment="center"
+            showsHorizontalScrollIndicator={false}
+          >
+            {stepsJSX}
+          </ScrollView>
+        </View>
+      </ScrollView>
+    </View>
   );
 }

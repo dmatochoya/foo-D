@@ -36,3 +36,10 @@ export function deleteProductFromGorceryList(productName: string) {
     productName,
   };
 }
+
+export function crossOverProductFromGorceryList(product: Object) {
+  return {
+    type: actionTypes.CROSS_OVER_PRODUCT,
+    product,
+  };
+}
