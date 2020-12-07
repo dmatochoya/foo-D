@@ -74,6 +74,7 @@ interface Props {
 }
 
 function List({ groceryList, actions } : Props) {
+  console.log(groceryList);
   const searchBoxRef = useRef();
   const { width, height } = Dimensions.get('window');
   const [sectionArrowDirection, setSectionArrowDirection] = useState<Object>({});

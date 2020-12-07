@@ -5,8 +5,9 @@ export default function groceryListReducer(state: Object[] = [], action
     case 'GET_PRODUCT_TYPE':
       productFound = state.find((product) => product.product === action.product[0].product);
       return productFound
-        ? [...state.filter((product) => product !== productFound),
-          { ...productFound, amount: productFound.amount + 1 }]
+        ? [...state.map((product) => (product !== productFound
+          ? product
+          : { ...productFound, amount: productFound.amount + 1 }))]
         : [...state, action.product?.[0]];
     case 'DELETE_PRODUCT':
       return state.filter((productItem: Object) => productItem.product !== action.productName);
