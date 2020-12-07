@@ -1,5 +1,3 @@
-import { ActionSheetIOS } from 'react-native';
-
 export default function groceryListReducer(state: Object[] = [], action
     : { type: string; product: Object, productName?: string }) {
   let productFound: Object | undefined;
