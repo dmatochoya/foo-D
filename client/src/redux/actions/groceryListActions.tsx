@@ -15,9 +15,11 @@ export function getProductTypeFromFoodDB(product: string) {
     try {
       let { data } = await axios.get(groceryListUrl, { params: { product } });
       if (!data.length) {
-        data = [{ product, type: 'uncategorized' }];
+        data = [{
+          product, type: 'uncategorized',
+        }];
       }
-      dispatch(getProductTypeFromFoodDBSuccess(data));
+      dispatch(getProductTypeFromFoodDBSuccess([{ ...data[0], isCrossed: false, amount: 1 }]));
     } catch (error) {
       console.log(error);
     }

@@ -61,8 +61,15 @@ interface Actions {
     crossOverProductFromGorceryList(foodGroupItem: string, crossedOver: boolean): void
 }
 
+interface Product {
+  product: string
+  type: string
+  amount: number
+  isCrossed: boolean
+}
+
 interface Props {
-  groceryList: Object[]
+  groceryList: Product[]
   actions: Actions
 }
 
@@ -137,7 +144,7 @@ function List({ groceryList, actions } : Props) {
               >
                 <View style={styles.ingredientContainer}>
                   <Text style={{ fontSize: 17, textDecorationLine: groceryList.find((product: Object) => product.product === foodGroupItem).isCrossed ? 'line-through' : 'none' }} onPress={() => actions.crossOverProductFromGorceryList({ name: foodGroupItem, crossedOver: !groceryList.find((product: Object) => product.product === foodGroupItem).isCrossed })} suppressHighlighting>
-                    {`${foodGroupItem[0].toUpperCase()}${foodGroupItem.slice(1)}`}
+                    {`${foodGroupItem[0].toUpperCase()}${foodGroupItem.slice(1)} ${groceryList.find((product: Object) => product.product === foodGroupItem).amount > 1 ? `(x${groceryList.find((product: Object) => product.product === foodGroupItem).amount})` : ''}`}
                   </Text>
                 </View>
               </Swipeable>

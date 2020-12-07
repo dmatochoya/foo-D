@@ -1,8 +1,15 @@
+import { ActionSheetIOS } from 'react-native';
+
 export default function groceryListReducer(state: Object[] = [], action
     : { type: string; product: Object, productName?: string }) {
+  let productFound: Object | undefined;
   switch (action.type) {
     case 'GET_PRODUCT_TYPE':
-      return [...state, action.product?.[0]];
+      productFound = state.find((product) => product.product === action.product[0].product);
+      return productFound
+        ? [...state.filter((product) => product !== productFound),
+          { ...productFound, amount: productFound.amount + 1 }]
+        : [...state, action.product?.[0]];
     case 'DELETE_PRODUCT':
       return state.filter((productItem: Object) => productItem.product !== action.productName);
     case 'CROSS_OVER_PRODUCT':
