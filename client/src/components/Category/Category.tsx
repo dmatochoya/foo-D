@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import {
-  View, Text, StatusBar, StyleSheet, Dimensions, Image, TouchableWithoutFeedback, ActivityIndicator,
+  View, Text, StatusBar, StyleSheet, Dimensions,
+  Image, TouchableWithoutFeedback, ActivityIndicator, ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import { ScrollView } from 'react-native-gesture-handler';
+// import { ScrollView } from 'react-native-gesture-handler';
 import { getRecipeByNameFromAPI } from '../../redux/actions/recipesActions';
 
 const styles = StyleSheet.create({

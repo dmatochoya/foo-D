@@ -1,10 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {
+  useState, useRef, useEffect,
+} from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import {
   Dimensions, Text, ScrollView, View, StatusBar, Image, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { deleteFromFavoriteRecipes, addToFavoriteRecipes } from '../../redux/actions/userActions';
 
 const styles = StyleSheet.create({
   header: {
@@ -74,11 +79,15 @@ interface Recipe {
 }
 
 interface Props {
+  user: Object
+  actions: Object
   route: { params: { recipe: Recipe } }
   navigation: { goBack(): void }
 }
 
-export default function Detail({
+function Detail({
+  user,
+  actions,
   route: { params: { recipe } },
   navigation: { goBack },
 }
@@ -87,12 +96,24 @@ export default function Detail({
   const recipeStepWidth = +(width - width * 10 / 100).toFixed();
   const linearGradientBoxHeight = height - 280;
 
-  const [heartIconPressed, setHeartIconPressed] = useState(false);
-  const scrollRef = useRef(null);
+  const recipeFoundInUserFavorites = user.favoriteRecipes
+    .find((favoriteRecipe: Object) => favoriteRecipe.strMeal === recipe.strMeal);
+
+  let heartIconPressed: boolean;
+
+  if (recipeFoundInUserFavorites) {
+    heartIconPressed = true;
+  } else {
+    heartIconPressed = false;
+  }
+
+  const stepsScrollRef = useRef(null);
+  const detailHorizontalScrollRef = useRef(null);
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    scrollRef.current.scrollTo({ x: 0, y: 0, animated: true });
+    stepsScrollRef.current.scrollTo({ x: 0, y: 0, animated: true });
+    detailHorizontalScrollRef.current.scrollTo({ x: 0, y: 0, animated: true });
   }, [isFocused]);
 
   let recipePhotoUri;
@@ -208,7 +229,17 @@ export default function Detail({
           type="ionicons"
           onPress={() => goBack()}
         />
-        <TouchableOpacity onPress={() => setHeartIconPressed(!heartIconPressed)} style={{ alignSelf: 'center' }}>
+        <TouchableOpacity
+          onPress={() => {
+            if (heartIconPressed) {
+              actions.deleteFromFavoriteRecipes(user, recipe);
+            } else {
+              actions.addToFavoriteRecipes(user, recipe);
+            }
+            heartIconPressed = !heartIconPressed;
+          }}
+          style={{ alignSelf: 'center' }}
+        >
           <Ionicons
             size={30}
             style={{ color: 'white' }}
@@ -217,7 +248,11 @@ export default function Detail({
           />
         </TouchableOpacity>
       </View>
-      <ScrollView style={{ marginBottom: 40 }} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        ref={detailHorizontalScrollRef}
+        style={{ marginBottom: 40 }}
+        showsVerticalScrollIndicator={false}
+      >
         <View>
           <Image style={{ height: height - 40 }} source={{ uri: recipePhotoUri }} />
           <LinearGradient
@@ -242,7 +277,7 @@ export default function Detail({
             Steps
           </Text>
           <ScrollView
-            ref={scrollRef}
+            ref={stepsScrollRef}
             horizontal
             pagingEnabled
             decelerationRate={0}
@@ -257,3 +292,20 @@ export default function Detail({
     </View>
   );
 }
+function mapStateToProps({ userReducer }
+  : { userReducer: Object}) {
+  return {
+    user: userReducer.user,
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
+  return {
+    actions: bindActionCreators({
+      deleteFromFavoriteRecipes,
+      addToFavoriteRecipes,
+    }, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Detail);

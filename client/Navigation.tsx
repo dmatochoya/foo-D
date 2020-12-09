@@ -44,9 +44,9 @@ function Navigation({ user } : { user: boolean }) {
 }
 
 function mapStateToProps({ userReducer }
-    : { userReducer: object}) {
+    : { userReducer: Object}) {
   return {
-    user: userReducer,
+    user: userReducer.isUserLoggedIn,
   };
 }
 

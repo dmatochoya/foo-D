@@ -5,7 +5,7 @@ import {
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import isUserLoggedIn from '../../redux/actions/userActions';
+import { isUserLoggedIn, getUserFromDB } from '../../redux/actions/userActions';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,6 +19,7 @@ function LoadingScreen({ navigation, actions } : { navigation: Object, actions: 
   const checkIfLoggedIn = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
+        actions.getUserFromDB(user.uid);
         actions.isUserLoggedIn(true);
         navigation.navigate('home');
       } else {
@@ -44,6 +45,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
     actions: bindActionCreators({
       isUserLoggedIn,
+      getUserFromDB,
     }, dispatch),
   };
 }

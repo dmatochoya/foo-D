@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import { useIsFocused } from '@react-navigation/native';
 import {
   restoreSearchReducer,
   getCategoryRecipesFromAPI, restoreCategoryRecipeByNameReducer, restoreCategoryRecipesReducer,

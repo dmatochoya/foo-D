@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from 'react';
 import 'react-native';
+import React, { FunctionComponent } from 'react';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';

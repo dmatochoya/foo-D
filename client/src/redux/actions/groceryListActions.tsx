@@ -1,7 +1,8 @@
 import axios from 'axios';
 import actionTypes from './actionTypes';
 
-const groceryListUrl = 'http://192.168.0.17:2000/list';
+const groceryListUrl = 'http://192.168.0.40:2000/list';
+const userUrl = 'http://192.168.0.40:2000/user';
 
 export function getProductTypeFromFoodDBSuccess(product: object) {
   return {
@@ -43,5 +44,23 @@ export function crossOverProductFromGorceryList(product: Object) {
   return {
     type: actionTypes.CROSS_OVER_PRODUCT,
     product,
+  };
+}
+
+export function updateUserGroceryList(user: Object) {
+  return {
+    type: actionTypes.UPDATE_USER_GROCERY_LIST,
+    user,
+  };
+}
+
+export function updateGroceryListInDB(user: Object, groceryList: Object[]) {
+  return async (dispatch: (arg0: { type: string; user: object; }) => void) => {
+    try {
+      const { data } = await axios.put(`${userUrl}/list`, { user, groceryList });
+      dispatch(updateUserGroceryList(data));
+    } catch (error) {
+      console.log(error);
+    }
   };
 }

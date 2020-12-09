@@ -6,7 +6,7 @@ import * as Google from 'expo-google-app-auth';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import isUserLoggedIn from '../../redux/actions/userActions';
+import { isUserLoggedIn, postUserInDB, getUserFromDB } from '../../redux/actions/userActions';
 
 const styles = StyleSheet.create({
   container: {
@@ -53,6 +53,7 @@ function LoginScreen({ actions } : { actions: Object}) {
 
         firebase.auth().signInWithCredential(credential).then((result: Object) => {
           if (result.additionalUserInfo.isNewUser) {
+            actions.postUserInDB({ ...googleUser.user, favoriteRecipes: [] });
             firebase
               .database()
               .ref(`/users/${result.user.uid}`)
@@ -65,13 +66,14 @@ function LoginScreen({ actions } : { actions: Object}) {
                 created_at: Date.now(),
               });
           } else {
+            actions.getUserFromDB(googleUser.user.id);
             firebase
               .database()
               .ref(`/users/${result.user.uid}`).update({
                 last_logged_in: Date.now(),
               });
           }
-        }).then(() => actions.isUserLoggedIn(true))
+        }).then(() => { actions.isUserLoggedIn(true); })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -110,6 +112,8 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
     actions: bindActionCreators({
       isUserLoggedIn,
+      getUserFromDB,
+      postUserInDB,
     }, dispatch),
   };
 }

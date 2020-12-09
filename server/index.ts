@@ -4,8 +4,10 @@ const bodyParser = require('body-parser');
 const { connect } = require('mongoose');
 const cors = require('cors');
 const ProductModel = require('./src/models/productModel')
+const userModel = require('./src/models/userModel')
 const recipesRoutes = require('./src/routes/recipesRoutes')();
 const groceryListRoutes = require('./src/routes/groceryListRoutes')(ProductModel);
+const userRoutes = require('./src/routes/userRoutes')(userModel);
 
 const app = express();
 app.use(cors());
@@ -20,6 +22,7 @@ app.use(bodyParser.json());
 
 app.use('/recipes', recipesRoutes);
 app.use('/list', groceryListRoutes);
+app.use('/user', userRoutes);
 
 app.listen(port, () => {
   console.log(`Server's running on port ${port}`);

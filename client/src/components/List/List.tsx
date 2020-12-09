@@ -9,7 +9,10 @@ import { Swipeable } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import { deleteProductFromGorceryList, deleteAllProductsFromGorceryList, crossOverProductFromGorceryList } from '../../redux/actions/groceryListActions';
+import {
+  deleteProductFromGorceryList, deleteAllProductsFromGorceryList,
+  crossOverProductFromGorceryList, updateGroceryListInDB,
+} from '../../redux/actions/groceryListActions';
 import AddIngredientBoxInput from './TextInput';
 
 const styles = StyleSheet.create({
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
 });
 
 interface Actions {
+    updateGroceryListInDB(): void
     deleteProductFromGorceryList(foodGroupItem: string): void
     deleteAllProductsFromGorceryList(): void
     crossOverProductFromGorceryList(foodGroupItem: string, crossedOver: boolean): void
@@ -70,15 +74,19 @@ interface Product {
 
 interface Props {
   groceryList: Product[]
+  user: Object
   actions: Actions
 }
 
-function List({ groceryList, actions } : Props) {
-  console.log(groceryList);
+function List({ groceryList, user, actions } : Props) {
   const searchBoxRef = useRef();
   const { width, height } = Dimensions.get('window');
   const [sectionArrowDirection, setSectionArrowDirection] = useState<Object>({});
   const [sectionVisibility, setSectionVisibility] = useState<Object>({});
+
+  useEffect(() => {
+    actions.updateGroceryListInDB(user, groceryList);
+  }, [groceryList]);
 
   const isFocused = useIsFocused();
 
@@ -95,17 +103,23 @@ function List({ groceryList, actions } : Props) {
   const sectionVisibilityObject: Object = {};
   const ingredientCrossedOverObject: Object = {};
 
-  const orderItemsByFoodType = () => {
-    groceryList.forEach((listItem: Object) => {
-      if (listItem.type in listOrderedByFoodType) {
-        listOrderedByFoodType[listItem.type].push(listItem.product);
-      } else {
-        ingredientCrossedOverObject[listItem.product] = false;
-        listOrderedByFoodType[listItem.type] = [listItem.product];
-        sectionArrowDirectionObject[listItem.type] = 'arrow-down';
-        sectionVisibilityObject[listItem.type] = { display: 'flex' };
-      }
-    });
+  const orderItemsByFoodType = (listItem) => {
+    if (listItem.type in listOrderedByFoodType) {
+      listOrderedByFoodType[listItem.type].push(listItem.product);
+    } else {
+      ingredientCrossedOverObject[listItem.product] = false;
+      listOrderedByFoodType[listItem.type] = [listItem.product];
+      sectionArrowDirectionObject[listItem.type] = 'arrow-down';
+      sectionVisibilityObject[listItem.type] = { display: 'flex' };
+    }
+  };
+
+  const determineIfUserAndListInSync = (userAndListInSync: boolean) => {
+    if (userAndListInSync) {
+      user.groceryList.forEach((listItem: Object) => orderItemsByFoodType(listItem));
+    } else {
+      groceryList.forEach((listItem: Object) => orderItemsByFoodType(listItem));
+    }
   };
 
   const addItemsToList = () => {
@@ -156,8 +170,11 @@ function List({ groceryList, actions } : Props) {
     });
   };
 
-  if (groceryList.length) {
-    orderItemsByFoodType();
+  if (groceryList.length >= user.groceryList.length && groceryList.length) {
+    determineIfUserAndListInSync(true);
+    addItemsToList();
+  } else {
+    determineIfUserAndListInSync(false);
     addItemsToList();
   }
 
@@ -172,7 +189,10 @@ function List({ groceryList, actions } : Props) {
     'Are you sure you want to delete all items from the list?',
     '',
     [
-      { text: 'Yes', onPress: () => actions.deleteAllProductsFromGorceryList() },
+      {
+        text: 'Yes',
+        onPress: () => actions.deleteAllProductsFromGorceryList(),
+      },
       { text: 'No' },
     ],
     { cancelable: false },
@@ -218,10 +238,11 @@ function List({ groceryList, actions } : Props) {
   );
 }
 
-function mapStateToProps({ groceryListReducer }
-    : { groceryListReducer: object}) {
+function mapStateToProps({ groceryListReducer, userReducer }
+    : { groceryListReducer: object, userReducer: Object}) {
   return {
     groceryList: groceryListReducer,
+    user: userReducer.user,
   };
 }
 
@@ -231,6 +252,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
       deleteProductFromGorceryList,
       deleteAllProductsFromGorceryList,
       crossOverProductFromGorceryList,
+      updateGroceryListInDB,
     }, dispatch),
   };
 }

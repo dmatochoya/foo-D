@@ -6,7 +6,7 @@ function groceryListController(ProductModel) {
         }
     
         ProductModel.find({product}, findCallback);
-      }
+    }
 
   return {
     getMethod,
