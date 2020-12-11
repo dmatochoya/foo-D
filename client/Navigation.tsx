@@ -11,12 +11,13 @@ import Category from './src/components/Category/Category';
 import List from './src/components/List/List';
 import User from './src/components/User/User';
 import Calendar from './src/components/Calendar/Calendar';
+import SelectMenu from './src/components/Calendar/SelectMenu';
 import Navbar from './src/components/Navbar/Navbar';
 import { navigationRef } from './RootNavigation';
 
 const Stack = createStackNavigator();
 
-function Navigation({ user } : { user: boolean }) {
+function Navigation({ user, selectMenu } : { user: boolean }) {
   return (
     <>
       <NavigationContainer ref={navigationRef}>
@@ -36,9 +37,10 @@ function Navigation({ user } : { user: boolean }) {
           <Stack.Screen name="list" component={List} options={{ headerShown: false }} />
           <Stack.Screen name="person" component={User} options={{ headerShown: false }} />
           <Stack.Screen name="calendar" component={Calendar} options={{ headerShown: false }} />
+          <Stack.Screen name="selectMenu" component={SelectMenu} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
-      {user ? <Navbar /> : null}
+      {user && !selectMenu ? <Navbar /> : null}
     </>
   );
 }
@@ -47,6 +49,7 @@ function mapStateToProps({ userReducer }
     : { userReducer: Object}) {
   return {
     user: userReducer.isUserLoggedIn,
+    selectMenu: userReducer.selectingMenu,
   };
 }
 

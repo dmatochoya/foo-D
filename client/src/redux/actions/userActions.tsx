@@ -1,7 +1,14 @@
 import axios from 'axios';
 import actionTypes from './actionTypes';
 
-const userUrl = 'http://192.168.0.40:2000/user';
+const userUrl = 'http://192.168.0.17:2000/user';
+
+export function isUserSelectingMenu(selectingMenu: boolean) {
+  return {
+    type: actionTypes.IS_USER_SELECTING_MENU,
+    selectingMenu,
+  };
+}
 
 export function isUserLoggedIn(user: boolean) {
   return {

@@ -6,7 +6,6 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-// import { ScrollView } from 'react-native-gesture-handler';
 import { getRecipeByNameFromAPI } from '../../redux/actions/recipesActions';
 
 const styles = StyleSheet.create({

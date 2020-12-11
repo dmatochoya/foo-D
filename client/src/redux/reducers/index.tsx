@@ -7,6 +7,7 @@ import categoryRecipesReducer from './categoryRecipesReducer';
 import categoryRecipesByNameReducer from './categoryRecipesByNameReducer';
 import groceryListReducer from './groceryListReducer';
 import userReducer from './userReducer';
+import calendarReducer from './calendarReducer';
 
 const rootReducer = combineReducers({
   recipesReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   categoryRecipesByNameReducer,
   groceryListReducer,
   userReducer,
+  calendarReducer,
 });
 
 export default rootReducer;

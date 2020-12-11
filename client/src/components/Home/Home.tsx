@@ -5,8 +5,8 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-// import { ScrollView } from 'react-native-gesture-handler';
 import { getRecipeFromAPI } from '../../redux/actions/recipesActions';
+import { isUserSelectingMenu } from '../../redux/actions/userActions';
 
 const styles = StyleSheet.create({
   header: {
@@ -54,6 +54,7 @@ interface Props {
 }
 
 function Home({ recipes, actions, navigation }: Props) {
+  actions.isUserSelectingMenu(false);
   console.ignoredYellowBox = ['Setting a timer'];
   const { height } = Dimensions.get('window');
   const recipePhotoHeight = +(height - 114).toFixed();
@@ -153,7 +154,7 @@ function mapStateToProps({ recipesReducer } : { recipesReducer: object}) {
 
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
-    actions: bindActionCreators({ getRecipeFromAPI }, dispatch),
+    actions: bindActionCreators({ getRecipeFromAPI, isUserSelectingMenu }, dispatch),
   };
 }
 

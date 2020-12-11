@@ -1,8 +1,8 @@
 import axios from 'axios';
 import actionTypes from './actionTypes';
 
-const groceryListUrl = 'http://192.168.0.40:2000/list';
-const userUrl = 'http://192.168.0.40:2000/user';
+const groceryListUrl = 'http://192.168.0.17:2000/list';
+const userUrl = 'http://192.168.0.17:2000/user';
 
 export function getProductTypeFromFoodDBSuccess(product: object) {
   return {

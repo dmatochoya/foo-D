@@ -1,10 +1,14 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  StyleSheet, Text, View, StatusBar, Dimensions, Animated,
+  StyleSheet, Text, View, StatusBar, Dimensions, Animated, Image, TouchableWithoutFeedback,
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
-// import Month from './Month';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { isUserSelectingMenu } from '../../redux/actions/userActions';
+
+// const arrowUp = require('./Curved_Arrow.svg.png');
 
 const styles = StyleSheet.create({
   header: {
@@ -21,10 +25,17 @@ const styles = StyleSheet.create({
 });
 
 let swipped = false;
-export default function Calendar() {
-  let currentPositionInCalendar = 5;
-  let swipeCalendarPosition = 0;
-  const { width } = Dimensions.get('window');
+let swipeCalendarPosition = 0;
+let firstTimeEntering = true;
+function Calendar({ actions, navigation }) {
+  const isFocused = useIsFocused();
+
+  // if (isFocused) {
+  //   actions.isUserSelectingMenu(false);
+  // }
+
+  const { width, height } = Dimensions.get('window');
+  let currentPositionInCalendar = 2;
   const now = new Date();
   const daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const monthsAndLength = [
@@ -79,13 +90,15 @@ export default function Calendar() {
 
   const calendar: JSX.Element[] = [];
   const days: Object[] = [];
+  const [calendarDayBackgroundColor, setCalendarDayBackgroundColor] = useState();
+  const calendarDaysBackgroundColor = [];
 
   const generateCalendar = () => {
     if (currentDate.weekOfTheMonth === 2 || currentDate.weekOfTheMonth === 4) {
       const arrayOfMonths: number[] = [];
-      const firstMonthNumber = now.getMonth() - 2;
+      const firstMonthNumber = now.getMonth();
       let monthNumber = firstMonthNumber;
-      for (let i = 0; i < 7; i += 1) {
+      for (let i = 0; i < 3; i += 1) {
         if (firstMonthNumber < 1) {
           monthNumber = firstMonthNumber + 12 + i;
           arrayOfMonths.push(firstMonthNumber + 12 + i);
@@ -148,47 +161,78 @@ export default function Calendar() {
           monthName = currentCalendarDays[0].month;
         }
 
-        calendar.push(
-          <>
-            <View key={Math.random() * Date.now()}>
-              <View style={styles.header}>
-                <Text style={{ color: 'white', fontSize: 25 }}>
-                  {monthName}
-                </Text>
-              </View>
+        const calendarDateWidth = width / 7;
+        const pressedCalendarDateWidthAndHeight = calendarDateWidth * 0.75;
 
-              <View style={{
-                flexDirection: 'row', width, height: 50, alignItems: 'center', marginTop: 70,
-              }}
-              >
-                {days.slice(firstDayOfFirstWeek, lastDayOfFirstWeek).map((day) => (
-                  <Text
-                    key={Math.random() * Date.now()}
-                    style={{
-                      backgroundColor: 'rgb(58, 58, 58)', width: width / 7, textAlign: 'center', color: 'white', fontSize: 20, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, height: 50, lineHeight: 50, borderRadius: 3,
-                    }}
-                  >
-                    {day.day}
-                  </Text>
-                ))}
-              </View>
-              <View style={{
-                flexDirection: 'row', width,
-              }}
-              >
-                {days.slice(firstDayOfLastWeek, lastDayOfLastWeek).map((day) => (
-                  <Text
-                    key={Math.random() * Date.now()}
-                    style={{
-                      backgroundColor: 'rgb(58, 58, 58)', width: width / 7, textAlign: 'center', color: 'white', fontSize: 20, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, borderTopWidth: 0, height: 50, lineHeight: 50, borderRadius: 3,
-                    }}
-                  >
-                    {day.day}
-                  </Text>
-                ))}
-              </View>
+        calendar.push(
+          <View key={Math.random() * Date.now()}>
+            <View style={styles.header}>
+              <Text style={{ color: 'white', fontSize: 25 }}>
+                {monthName}
+              </Text>
             </View>
-          </>,
+            <View style={{
+              flexDirection: 'row', width, height: 50, alignItems: 'center', marginTop: 70,
+            }}
+            >
+              {days.slice(firstDayOfFirstWeek, lastDayOfFirstWeek).map((day) => (
+                <TouchableWithoutFeedback
+                  key={Math.random() * Date.now()}
+                  onPress={() => {
+                    const previousMarkedDate = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
+                    setCalendarDayBackgroundColor({ ...calendarDayBackgroundColor, [`${previousMarkedDate}`]: 'rgb(58, 58, 58)', [`${monthName}${day.day}`]: 'black' });
+                  }}
+                >
+                  <View style={{
+                    backgroundColor: 'rgb(58, 58, 58)', width: calendarDateWidth, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, height: 50, borderRadius: 3, justifyContent: 'center', alignItems: 'center',
+                    // backgroundColor: 'rgb(58, 58, 58)', width: width / 7, textAlign: 'center', color: 'white', fontSize: 20, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, height: 50, lineHeight: 50, borderRadius: 3,
+                  }}
+                  >
+                    <Text style={{
+                      backgroundColor: calendarDayBackgroundColor ? calendarDayBackgroundColor[`${monthName}${day.day}`] : 'rgb(58, 58, 58)', width: pressedCalendarDateWidthAndHeight, height: pressedCalendarDateWidthAndHeight, borderRadius: pressedCalendarDateWidthAndHeight / 2, textAlign: 'center', lineHeight: pressedCalendarDateWidthAndHeight, color: 'white', fontSize: 20,
+                    }}
+                    >
+                      {day.day}
+                    </Text>
+                    <Text style={{ fontSize: 0 }}>
+                      {currentDate.month === monthName && currentDate.dayOfTheMonth === day.day ? calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'black' }) : calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'rgb(58, 58, 58)' })}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              ))}
+            </View>
+            <View style={{
+              flexDirection: 'row', width,
+            }}
+            >
+              {days.slice(firstDayOfLastWeek, lastDayOfLastWeek).map((day) => (
+                <TouchableWithoutFeedback
+                  key={Math.random() * Date.now()}
+                  onPress={() => {
+                    const previousWhiteDate = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
+                    setCalendarDayBackgroundColor({ ...calendarDayBackgroundColor, [`${previousWhiteDate}`]: 'rgb(58, 58, 58)', [`${monthName}${day.day}`]: 'black' });
+                  }}
+                >
+                  <View style={{
+                    backgroundColor: 'rgb(58, 58, 58)', width: calendarDateWidth, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, borderTopWidth: 0, height: 50, borderRadius: 3, justifyContent: 'center', alignItems: 'center',
+                  // backgroundColor: 'rgb(58, 58, 58)', width: width / 7, textAlign: 'center', color: 'white', fontSize: 20, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, height: 50, lineHeight: 50, borderRadius: 3,
+                  }}
+                  >
+                    <Text style={{
+                      backgroundColor: calendarDayBackgroundColor ? calendarDayBackgroundColor[`${monthName}${day.day}`] : 'rgb(58, 58, 58)', width: pressedCalendarDateWidthAndHeight, height: pressedCalendarDateWidthAndHeight, borderRadius: pressedCalendarDateWidthAndHeight / 2, textAlign: 'center', lineHeight: pressedCalendarDateWidthAndHeight, color: 'white', fontSize: 20,
+                    }}
+                    >
+                      {day.day}
+                    </Text>
+                    <Text style={{ fontSize: 0 }}>
+                      {currentDate.month === monthName && currentDate.dayOfTheMonth === day.day ? calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'black' }) : calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'rgb(58, 58, 58)' })}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              ))}
+            </View>
+          </View>
+          ,
         );
         firstDayOfFirstWeek += 14;
         lastDayOfFirstWeek += 14;
@@ -198,16 +242,20 @@ export default function Calendar() {
     }
   };
 
-  const horizontalCalendarRef = useRef(null);
-  const isFocused = useIsFocused();
+  useEffect(() => {
+    const initialState = {};
+    calendarDaysBackgroundColor.forEach((date) => Object.assign(initialState, date));
+    setCalendarDayBackgroundColor(initialState);
+  }, []);
 
+  const horizontalCalendarRef = useRef(null);
   const swipeCalendarAnimation = useRef(new Animated.Value(0)).current;
 
   const swipeCalendar = async (toTheLeft: boolean, initialEffect: boolean) => {
     if (toTheLeft) {
-      if (currentPositionInCalendar !== calendar.length - 1) {
+      if (currentPositionInCalendar !== calendar.length - 2) {
         currentPositionInCalendar += 1;
-        swipeCalendarPosition -= initialEffect ? width * 6 : width;
+        swipeCalendarPosition -= initialEffect ? width * 2 : width;
       }
     } else if (currentPositionInCalendar) {
       swipeCalendarPosition += width;
@@ -226,12 +274,14 @@ export default function Calendar() {
 
   generateCalendar();
 
-  useEffect(() => {
+  if (firstTimeEntering) {
     swipeCalendar(true, true);
-  }, [isFocused]);
+    firstTimeEntering = false;
+  }
 
   return (
     <View style={{ marginTop: StatusBar.currentHeight }} testID="test">
+      <StatusBar backgroundColor="black" barStyle="light-content" translucent />
       <GestureRecognizer
         onSwipeLeft={() => {
           swipped = true;
@@ -250,7 +300,68 @@ export default function Calendar() {
           {calendar}
         </Animated.View>
       </GestureRecognizer>
-
+      <View>
+        <View style={{ alignItems: 'flex-end', padding: 20 }}>
+          <View style={{
+            width: 74, height: 74, borderRadius: 37, backgroundColor: 'rgb(150, 89, 42)', alignItems: 'center', justifyContent: 'center', elevation: 5,
+          }}
+          >
+            <Text
+              style={{
+                fontSize: 70,
+                fontFamily: 'serif',
+                color: 'white',
+                textShadowColor: 'black',
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 2,
+              }}
+              onPress={() => {
+                actions.isUserSelectingMenu(true);
+                navigation.navigate('selectMenu', { date: Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black') });
+              }}
+            >
+              +
+            </Text>
+          </View>
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{
+            fontSize: 20, width: 240, textAlign: 'center', position: 'relative', top: 55, lineHeight: 30,
+          }}
+          >
+            No recipes on this day. Add one!
+          </Text>
+        </View>
+        <View style={{
+          position: 'relative', top: -100, alignItems: 'flex-end',
+        }}
+        >
+          <View style={{ transform: [{ rotate: '0deg' }], width: 60 }}>
+            <Image
+              style={{
+                width: 75, height: 85, position: 'relative', right: 130,
+              }}
+              source={{ uri: 'https://cdn.fastly.picmonkey.com/content4/previews/infodoodles/infodoodles_41_550.png' }}
+            />
+          </View>
+        </View>
+      </View>
     </View>
   );
 }
+
+function mapStateToProps() {
+  return {
+
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
+  return {
+    actions: bindActionCreators({
+      isUserSelectingMenu,
+    }, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Calendar);

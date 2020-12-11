@@ -6,6 +6,7 @@ import { LogBox } from 'react-native';
 import Navigation from './Navigation';
 import configureStore from './src/redux/configureStore';
 import { getRecipeCategoriesFromAPI } from './src/redux/actions/recipesActions';
+import { isUserSelectingMenu } from './src/redux/actions/userActions';
 import firebaseConfig from './config';
 
 LogBox.ignoreAllLogs();

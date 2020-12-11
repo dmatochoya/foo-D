@@ -18,13 +18,15 @@ const styles = StyleSheet.create({
 function LoadingScreen({ navigation, actions } : { navigation: Object, actions: Object}) {
   const checkIfLoggedIn = () => {
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        actions.getUserFromDB(user.uid);
-        actions.isUserLoggedIn(true);
-        navigation.navigate('home');
-      } else {
-        navigation.navigate('loginScreen');
-      }
+      setTimeout(() => {
+        if (user) {
+          actions.getUserFromDB(user.uid);
+          actions.isUserLoggedIn(true);
+          navigation.navigate('home');
+        } else {
+          navigation.navigate('loginScreen');
+        }
+      }, 2000);
     });
   };
 

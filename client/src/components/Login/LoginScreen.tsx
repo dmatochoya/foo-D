@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-  StyleSheet, View, Button, AsyncStorage,
+  StyleSheet, View, Button, Text,
 } from 'react-native';
+import { Icon } from 'react-native-elements';
 import * as Google from 'expo-google-app-auth';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
@@ -102,8 +103,11 @@ function LoginScreen({ actions } : { actions: Object}) {
     }
   };
   return (
-    <View style={styles.container}>
-      <Button title="Sign in with Google" onPress={() => signInWithGoogleAsync()} />
+    <View style={[styles.container, { backgroundColor: 'rgb(230, 84, 84)' }]}>
+      <View style={{ flexDirection: 'row', backgroundColor: 'white' }} onTouchEnd={() => signInWithGoogleAsync()}>
+        <Icon size={30} name="logo-google" type="ionicon" />
+        <Text>Sign in with Google</Text>
+      </View>
     </View>
   );
 }
