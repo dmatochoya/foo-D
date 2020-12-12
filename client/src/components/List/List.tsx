@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {
   useEffect, useRef, useState,
 } from 'react';
@@ -59,10 +60,10 @@ const styles = StyleSheet.create({
 });
 
 interface Actions {
-    updateGroceryListInDB(): void
+    updateGroceryListInDB(user: Object, groceryList: Object): void
     deleteProductFromGorceryList(foodGroupItem: string): void
     deleteAllProductsFromGorceryList(): void
-    crossOverProductFromGorceryList(foodGroupItem: string, crossedOver: boolean): void
+    crossOverProductFromGorceryList(object: Object): void
 }
 
 interface Product {
@@ -73,7 +74,7 @@ interface Product {
 }
 
 interface Props {
-  groceryList: Product[]
+  groceryList: Object
   user: Object
   actions: Actions
 }
@@ -103,7 +104,7 @@ function List({ groceryList, user, actions } : Props) {
   const sectionVisibilityObject: Object = {};
   const ingredientCrossedOverObject: Object = {};
 
-  const orderItemsByFoodType = (listItem) => {
+  const orderItemsByFoodType = (listItem: Object) => {
     if (listItem.type in listOrderedByFoodType) {
       listOrderedByFoodType[listItem.type].push(listItem.product);
     } else {

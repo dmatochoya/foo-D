@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import {
   StyleSheet, Text, Image, View, StatusBar, ScrollView, Dimensions, TouchableWithoutFeedback,

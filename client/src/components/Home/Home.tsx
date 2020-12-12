@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect } from 'react';
 import {
   View, Text, StatusBar, StyleSheet, Dimensions, Image, TouchableWithoutFeedback, ScrollView,
@@ -49,7 +50,7 @@ interface Navigation {
 
 interface Props {
     recipes: Array<Recipe>
-    actions: object
+    actions: Object
     navigation: Navigation
 }
 

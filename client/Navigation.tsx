@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -17,7 +18,7 @@ import { navigationRef } from './RootNavigation';
 
 const Stack = createStackNavigator();
 
-function Navigation({ user, selectMenu } : { user: boolean }) {
+function Navigation({ user, selectMenu } : { user: boolean, selectMenu: boolean }) {
   return (
     <>
       <NavigationContainer ref={navigationRef}>

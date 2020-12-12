@@ -38,19 +38,6 @@ const styles = StyleSheet.create({
   },
 });
 
-interface Recipe {
-    strMeal: string
-}
-
-interface RecipeList {
-    meals: Recipe[]
-}
-
-interface CategoryRecipe {
-    strMealThumb: string
-    strMeal: string
-}
-
 interface Navigation {
     navigate(route: string, data: object): void
 }
@@ -60,8 +47,8 @@ interface Actions {
   }
 
 interface Props {
-    recipes: RecipeList
-    categoryRecipes: CategoryRecipe[]
+    recipes: Object
+    categoryRecipes: Object
     actions: Actions
     navigation: Navigation
     route: { params: { categoryName: string } }

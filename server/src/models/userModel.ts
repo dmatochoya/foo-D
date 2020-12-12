@@ -10,6 +10,7 @@ const userSchema = new Schema({
   photoUrl: {type: String},
   favoriteRecipes: { type : Array, "default" : [] },
   groceryList: { type : Array, "default" : [] },
+  menus: { type : Array, "default" : [] },
 });
 
 module.exports = model('users', userSchema);

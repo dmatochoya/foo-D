@@ -8,8 +8,6 @@ import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { isUserSelectingMenu } from '../../redux/actions/userActions';
 
-// const arrowUp = require('./Curved_Arrow.svg.png');
-
 const styles = StyleSheet.create({
   header: {
     position: 'absolute',
@@ -27,8 +25,10 @@ const styles = StyleSheet.create({
 let swipped = false;
 let swipeCalendarPosition = 0;
 let firstTimeEntering = true;
-function Calendar({ actions, navigation }) {
+function Calendar({ user, actions, navigation }
+  : { user: Object, actions: Object, navigation: Object}) {
   const isFocused = useIsFocused();
+  // console.log(user, 'calendarrrr');
 
   // if (isFocused) {
   //   actions.isUserSelectingMenu(false);
@@ -90,8 +90,8 @@ function Calendar({ actions, navigation }) {
 
   const calendar: JSX.Element[] = [];
   const days: Object[] = [];
-  const [calendarDayBackgroundColor, setCalendarDayBackgroundColor] = useState();
-  const calendarDaysBackgroundColor = [];
+  const [calendarDayBackgroundColor, setCalendarDayBackgroundColor] = useState<Object>({});
+  const calendarDaysBackgroundColor: { [x: string]: string; }[] = [];
 
   const generateCalendar = () => {
     if (currentDate.weekOfTheMonth === 2 || currentDate.weekOfTheMonth === 4) {
@@ -152,7 +152,7 @@ function Calendar({ actions, navigation }) {
             .filter((day, index, array) => array[array.length - 1].month === day.month);
         }
 
-        let monthName;
+        let monthName: {};
         if (newMonth && newMonth.length > 7) {
           monthName = newMonth[0].month;
         } else if (newMonth && newMonth.length === 7 && goToNextMonth) {
@@ -185,7 +185,6 @@ function Calendar({ actions, navigation }) {
                 >
                   <View style={{
                     backgroundColor: 'rgb(58, 58, 58)', width: calendarDateWidth, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, height: 50, borderRadius: 3, justifyContent: 'center', alignItems: 'center',
-                    // backgroundColor: 'rgb(58, 58, 58)', width: width / 7, textAlign: 'center', color: 'white', fontSize: 20, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, height: 50, lineHeight: 50, borderRadius: 3,
                   }}
                   >
                     <Text style={{
@@ -215,7 +214,6 @@ function Calendar({ actions, navigation }) {
                 >
                   <View style={{
                     backgroundColor: 'rgb(58, 58, 58)', width: calendarDateWidth, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, borderTopWidth: 0, height: 50, borderRadius: 3, justifyContent: 'center', alignItems: 'center',
-                  // backgroundColor: 'rgb(58, 58, 58)', width: width / 7, textAlign: 'center', color: 'white', fontSize: 20, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, height: 50, lineHeight: 50, borderRadius: 3,
                   }}
                   >
                     <Text style={{
@@ -279,6 +277,10 @@ function Calendar({ actions, navigation }) {
     firstTimeEntering = false;
   }
 
+  const dateMarked = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
+  console.log(dateMarked);
+  const menuFound = user.menus.find((menu) => Object.keys(menu)[0] === dateMarked);
+  console.log(menuFound);
   return (
     <View style={{ marginTop: StatusBar.currentHeight }} testID="test">
       <StatusBar backgroundColor="black" barStyle="light-content" translucent />
@@ -301,58 +303,63 @@ function Calendar({ actions, navigation }) {
         </Animated.View>
       </GestureRecognizer>
       <View>
-        <View style={{ alignItems: 'flex-end', padding: 20 }}>
-          <View style={{
-            width: 74, height: 74, borderRadius: 37, backgroundColor: 'rgb(150, 89, 42)', alignItems: 'center', justifyContent: 'center', elevation: 5,
-          }}
-          >
-            <Text
-              style={{
-                fontSize: 70,
-                fontFamily: 'serif',
-                color: 'white',
-                textShadowColor: 'black',
-                textShadowOffset: { width: 1, height: 1 },
-                textShadowRadius: 2,
+        {menuFound ? <Text>Yasssss</Text>
+          : (
+            <>
+              <View style={{ alignItems: 'flex-end', padding: 20 }}>
+                <View style={{
+                  width: 74, height: 74, borderRadius: 37, backgroundColor: 'rgb(150, 89, 42)', alignItems: 'center', justifyContent: 'center', elevation: 5,
+                }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 70,
+                      fontFamily: 'serif',
+                      color: 'white',
+                      textShadowColor: 'black',
+                      textShadowOffset: { width: 1, height: 1 },
+                      textShadowRadius: 2,
+                    }}
+                    onPress={() => {
+                      actions.isUserSelectingMenu(true);
+                      navigation.navigate('selectMenu', { date: dateMarked });
+                    }}
+                  >
+                    +
+                  </Text>
+                </View>
+              </View>
+              <View style={{ alignItems: 'center' }}>
+                <Text style={{
+                  fontSize: 20, width: 240, textAlign: 'center', position: 'relative', top: 55, lineHeight: 30,
+                }}
+                >
+                  No recipes on this day. Add one!
+                </Text>
+              </View>
+              <View style={{
+                position: 'relative', top: -100, alignItems: 'flex-end',
               }}
-              onPress={() => {
-                actions.isUserSelectingMenu(true);
-                navigation.navigate('selectMenu', { date: Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black') });
-              }}
-            >
-              +
-            </Text>
-          </View>
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={{
-            fontSize: 20, width: 240, textAlign: 'center', position: 'relative', top: 55, lineHeight: 30,
-          }}
-          >
-            No recipes on this day. Add one!
-          </Text>
-        </View>
-        <View style={{
-          position: 'relative', top: -100, alignItems: 'flex-end',
-        }}
-        >
-          <View style={{ transform: [{ rotate: '0deg' }], width: 60 }}>
-            <Image
-              style={{
-                width: 75, height: 85, position: 'relative', right: 130,
-              }}
-              source={{ uri: 'https://cdn.fastly.picmonkey.com/content4/previews/infodoodles/infodoodles_41_550.png' }}
-            />
-          </View>
-        </View>
+              >
+                <View style={{ transform: [{ rotate: '0deg' }], width: 60 }}>
+                  <Image
+                    style={{
+                      width: 75, height: 85, position: 'relative', right: 130,
+                    }}
+                    source={{ uri: 'https://cdn.fastly.picmonkey.com/content4/previews/infodoodles/infodoodles_41_550.png' }}
+                  />
+                </View>
+              </View>
+            </>
+          )}
       </View>
     </View>
   );
 }
 
-function mapStateToProps() {
+function mapStateToProps({ userReducer }: {userReducer: Object}) {
   return {
-
+    user: userReducer.user,
   };
 }
 

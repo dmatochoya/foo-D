@@ -53,12 +53,25 @@ function userController(User) {
             body.user.id, update, { new: true }, callback,
         );
     }
+
+    function putMenu(req, res) {
+        const {body} = req;
+        function callback(error, updatedMenu) {
+            return error ? res.send(error) : res.send(updatedMenu);
+        }
+
+        User.findOneAndUpdate(
+            body.user.id, body.user, { new: true }, callback,
+        );
+    }
+
   return {
     getMethod,
     postMethod,
     putFavoriteRecipe,
     deleteFavoriteRecipe,
-    putListItem
+    putListItem,
+    putMenu
   };
 }
 

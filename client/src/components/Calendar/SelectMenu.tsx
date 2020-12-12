@@ -1,10 +1,14 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet, View, BackHandler, Text, StatusBar, Image, Dimensions, ScrollView, Button,
 } from 'react-native';
+import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { isUserSelectingMenu } from '../../redux/actions/userActions';
+import postMenu from '../../redux/actions/calendarActions';
+import { navigationRef } from '../../../RootNavigation';
 
 const styles = StyleSheet.create({
   sectionTitle: {
@@ -40,24 +44,31 @@ const styles = StyleSheet.create({
   },
 });
 
-const SelectMenu = ({ user, route: { params: { date } }, actions }) => {
+interface Props {
+    user: Object
+    route: Object
+    actions: Object
+    navigation: Object
+}
+
+const SelectMenu = ({
+  user, route: { params: { date } }, actions, navigation,
+} : Props) => {
   const { width, height } = Dimensions.get('window');
-  const [selectMenuSection, setSelectMenuSection] = useState();
+  const [selectMenuSection, setSelectMenuSection] = useState<Object>();
 
-  const selectMenuSectionObject = {};
+  const selectMenuSectionObject: Object = {};
 
-  user.favoriteRecipes.forEach((recipe) => {
-    selectMenuSectionObject[`${recipe.strMeal}`] = 'none';
+  user.favoriteRecipes.forEach((recipe: Object) => {
+    selectMenuSectionObject[`${recipe.strMeal}`] = { displayDropDown: 'none', addedTo: '' };
   });
 
   useEffect(() => {
-    console.log(selectMenuSectionObject, 'holi');
     setSelectMenuSection(selectMenuSectionObject);
-    console.log(selectMenuSection);
   }, []);
 
   useEffect(() => {
-    const goBackAndShowNavbar = () => {
+    const goBackAndShowNavbar = (): boolean | null | undefined => {
       actions.isUserSelectingMenu(false);
     };
 
@@ -70,7 +81,8 @@ const SelectMenu = ({ user, route: { params: { date } }, actions }) => {
   }, []);
 
   const dateArray = date.split('');
-  dateArray.splice(date.split('').findIndex((character) => !Number.isNaN(+character)), 0, ' ');
+  dateArray.splice(date.split('').findIndex((character: string) => !Number.isNaN(+character)), 0, ' ');
+
   return (
     <>
       <StatusBar backgroundColor="black" barStyle="light-content" translucent />
@@ -89,52 +101,115 @@ const SelectMenu = ({ user, route: { params: { date } }, actions }) => {
             }}
             >
               <View style={{ alignItems: 'center', paddingBottom: 30 }}>
-                {user.favoriteRecipes.length
-              && user.favoriteRecipes.map((recipe: Object) => (
-                <View style={[styles.favoriteCard, { flexDirection: 'row', width: width - 30 }]}>
-                  <Image
-                    style={{
-                      height: 100, width: 155, borderRadius: 5, marginRight: 15,
-                    }}
-                    source={{ uri: recipe.strMealThumb }}
-                  />
-                  <View style={{
-                    flexGrow: 1, paddingRight: 15, justifyContent: 'center', flexDirection: 'row',
-                  }}
-                  >
-                    <Text style={{
-                      fontSize: 20, flex: 1, flexWrap: 'wrap', textAlign: 'center', marginTop: 5,
-                    }}
-                    >
-                      {recipe.strMeal}
-                    </Text>
-                  </View>
-                  <View style={{
-                    position: 'absolute', top: 10, left: 10, flexDirection: 'row',
-                  }}
-                  >
-                    <Text
+                {user.favoriteRecipes.length && user.favoriteRecipes.map((recipe: Object) => (
+                  <View style={[styles.favoriteCard, { flexDirection: 'row', width: width - 30, position: 'relative' }]}>
+                    {selectMenuSection && selectMenuSection[`${recipe.strMeal}`].addedTo
+                      ? (
+                        <View style={{
+                          zIndex: 1,
+                          backgroundColor: 'rgba(0, 0, 0, 0.55)',
+                          position: 'absolute',
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: 5,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                        >
+                          <View
+                            style={{
+                              position: 'absolute', top: 5, left: 5, backgroundColor: 'rgb(225, 225, 225)', height: 25, width: 25, borderRadius: 25, borderColor: 'black', borderWidth: 0.5, zIndex: 3,
+                            }}
+                          >
+                            <Icon
+                              onPress={() => setSelectMenuSection({ ...selectMenuSection, [`${recipe.strMeal}`]: { ...selectMenuSection[`${recipe.strMeal}`], addedTo: '' } })}
+                              size={23}
+                              color="black"
+                              name="md-close"
+                              type="ionicon"
+                            />
+                          </View>
+                          <Text style={{ color: 'white', fontSize: 35 }}>{selectMenuSection[`${recipe.strMeal}`].addedTo}</Text>
+                        </View>
+                      )
+                      : null}
+                    <Image
                       style={{
-                        fontSize: 30, fontFamily: 'serif', backgroundColor: 'white', height: 20, width: 20, lineHeight: 28, borderRadius: 20, textAlign: 'center',
+                        height: 100, width: 155, borderRadius: 5, marginRight: 15,
                       }}
-                      onPress={() => {
-                        if (selectMenuSection[`${recipe.strMeal}`] === 'none') {
-                          setSelectMenuSection({ ...selectMenuSection, [`${recipe.strMeal}`]: 'flex' });
-                        } else {
-                          setSelectMenuSection({ ...selectMenuSection, [`${recipe.strMeal}`]: 'none' });
-                        }
-                      }}
+                      source={{ uri: recipe.strMealThumb }}
+                    />
+                    <View style={{
+                      flexGrow: 1, paddingRight: 15, justifyContent: 'center', flexDirection: 'row',
+                    }}
                     >
-                      +
-                    </Text>
-                    <View style={{ display: selectMenuSection ? selectMenuSection[`${recipe.strMeal}`] : 'none' }}>
-                      <Text>Breakfast</Text>
-                      <Text>Lunch</Text>
-                      <Text>Dinner</Text>
+                      <Text style={{
+                        fontSize: 20, flex: 1, flexWrap: 'wrap', textAlign: 'center', marginTop: 5,
+                      }}
+                      >
+                        {recipe.strMeal}
+                      </Text>
+                    </View>
+                    <View style={{
+                      position: 'absolute', top: 5, left: 5, flexDirection: 'row',
+                    }}
+                    >
+                      <Text
+                        style={{
+                          display: selectMenuSection && selectMenuSection[`${recipe.strMeal}`].addedTo ? 'none' : 'flex',
+                          fontSize: 35,
+                          fontFamily: 'serif',
+                          backgroundColor: 'white',
+                          height: 25,
+                          width: 25,
+                          lineHeight: 33,
+                          borderRadius: 25,
+                          textAlign: 'center',
+                          borderColor: 'black',
+                          borderWidth: 0.5,
+                          zIndex: 1,
+                        }}
+                        onPress={() => {
+                          if (selectMenuSection[`${recipe.strMeal}`].displayDropDown === 'none') {
+                            setSelectMenuSection({ ...selectMenuSection, [`${recipe.strMeal}`]: { ...selectMenuSection[`${recipe.strMeal}`], displayDropDown: 'flex' } });
+                          } else {
+                            setSelectMenuSection({ ...selectMenuSection, [`${recipe.strMeal}`]: { ...selectMenuSection[`${recipe.strMeal}`], displayDropDown: 'none' } });
+                          }
+                        }}
+                      >
+                        +
+                      </Text>
+                      <View style={{
+                        display: selectMenuSection ? selectMenuSection[`${recipe.strMeal}`].displayDropDown : 'none', backgroundColor: 'rgba(250, 250, 250, 0.9)', position: 'relative', top: -9, right: 11.5, width: 110, borderRadius: 8, alignItems: 'center', borderColor: 'black', borderWidth: 0.5,
+                      }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 17, paddingVertical: 6, textAlign: 'center', borderBottomColor: 'black', borderBottomWidth: 1, width: '80%',
+                          }}
+                          onPress={() => setSelectMenuSection({ ...selectMenuSection, [`${recipe.strMeal}`]: { displayDropDown: 'none', addedTo: 'Breakfast' } })}
+                        >
+                          Breakfast
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 17, paddingVertical: 6, textAlign: 'center', borderBottomColor: 'black', borderBottomWidth: 1, width: '80%',
+                          }}
+                          onPress={() => setSelectMenuSection({ ...selectMenuSection, [`${recipe.strMeal}`]: { displayDropDown: 'none', addedTo: 'Lunch' } })}
+
+                        >
+                          Lunch
+                        </Text>
+                        <Text
+                          style={{ fontSize: 17, paddingVertical: 6, textAlign: 'center' }}
+                          onPress={() => setSelectMenuSection({ ...selectMenuSection, [`${recipe.strMeal}`]: { displayDropDown: 'none', addedTo: 'Dinner' } })}
+                        >
+                          Dinner
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
-              ))}
+                ))}
               </View>
             </ScrollView>
           </View>
@@ -143,9 +218,25 @@ const SelectMenu = ({ user, route: { params: { date } }, actions }) => {
             <View />
           </View>
         </View>
-        <Text style={{
-          position: 'absolute', bottom: 0, height: 60, backgroundColor: 'black', color: 'white', width, textAlign: 'center', lineHeight: 60, fontSize: 20,
-        }}
+        <Text
+          style={{
+            position: 'absolute', bottom: 0, height: 60, backgroundColor: 'black', color: 'white', width, textAlign: 'center', lineHeight: 60, fontSize: 20,
+          }}
+          onPress={() => {
+            Object.keys(selectMenuSection)
+              .forEach((recipe) => delete selectMenuSection[recipe].displayDropDown);
+
+            user.menus = [...user.menus, { [date]: selectMenuSection }];
+            actions.postMenu(user);
+
+            Object.keys(selectMenuSection)
+              .forEach((recipe) => { selectMenuSection[recipe].displayDropDown = 'none'; });
+
+            setTimeout(() => {
+              actions.isUserSelectingMenu(false);
+              navigation.navigate('calendar');
+            }, 500);
+          }}
         >
           Create menu
         </Text>
@@ -165,6 +256,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
     actions: bindActionCreators({
       isUserSelectingMenu,
+      postMenu,
     }, dispatch),
   };
 }

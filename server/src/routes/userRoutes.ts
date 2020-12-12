@@ -17,6 +17,9 @@ function userRouter(User) {
   router.route('/list')
     .put(user.putListItem)
 
+  router.route('/menu')
+    .put(user.putMenu)
+
   return router;
 }
 
