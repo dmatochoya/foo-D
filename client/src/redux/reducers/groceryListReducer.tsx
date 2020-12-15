@@ -1,4 +1,6 @@
 /* istanbul ignore file */
+// @ts-nocheck
+
 export default function groceryListReducer(state: Object[] = [], action
     : { type: string; product: Object, productName?: string }) {
   let productFound: Object | undefined;

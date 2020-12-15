@@ -23,7 +23,7 @@ module.exports = {
   rules: {
     'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': ['error'],
+    '@typescript-eslint/no-use-before-define': 'off',
     'no-console': 0,
     'no-debugger': 0,
     'import/extensions': 'off',
@@ -33,5 +33,6 @@ module.exports = {
     'no-undef': 'off',
     'no-param-reassign': 'off',
     'consistent-return': 'off',
+    'prefer-destructuring': 'off',
   },
 };

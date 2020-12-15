@@ -4,10 +4,10 @@ import { render, fireEvent } from '@testing-library/react-native';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import Navbar from './Navbar';
-import * as RootNavigation from '../../../RootNavigation';
+import Navbar from '../src/components/Navbar/Navbar';
+import * as RootNavigation from '../RootNavigation';
 
-jest.mock('../../../RootNavigation');
+jest.mock('../RootNavigation');
 
 const buildStore = configureStore([thunk]);
 

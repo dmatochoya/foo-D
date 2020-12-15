@@ -1,6 +1,5 @@
-/* istanbul ignore file */
 export default function userReducer(state = {}, action :
-    { type: string; user: Object; selectingMenu: boolean; menu: Object}) {
+    { type: string; user?: Object; selectingMenu?: boolean; menu?: Object}) {
   switch (action.type) {
     case 'USER_IS_LOGGED_IN':
       return { ...state, isUserLoggedIn: action.user };

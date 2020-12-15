@@ -1,58 +1,15 @@
+// @ts-nocheck
 import React, { useEffect } from 'react';
 import {
-  View, Text, StatusBar, StyleSheet, Dimensions,
+  View, Text, StatusBar, Dimensions,
   Image, TouchableWithoutFeedback, ActivityIndicator, ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import Props from '../Interfaces/CategoryInterfaces';
+import styles from './CategoryStyles';
 import { getRecipeByNameFromAPI } from '../../redux/actions/recipesActions';
-
-const styles = StyleSheet.create({
-  header: {
-    position: 'absolute',
-    top: 0,
-    zIndex: 1,
-    width: '100%',
-    height: 50,
-    backgroundColor: 'rgb(230, 84, 84)',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  linearGradientBox: {
-    position: 'absolute',
-    backgroundColor: ' rgba(250, 250, 250, 0.4)',
-    width: '100%',
-    height: 240,
-    alignItems: 'center',
-    padding: 10,
-  },
-  recipeName: {
-    color: 'black',
-    fontSize: 30,
-    fontWeight: 'bold',
-    textShadowColor: 'rgba(250, 250, 250, 0.4)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
-    textAlign: 'center',
-  },
-});
-
-interface Navigation {
-    navigate(route: string, data: object): void
-}
-
-interface Actions {
-    getRecipeByNameFromAPI(text : string, boolean: boolean): void
-  }
-
-interface Props {
-    recipes: Object
-    categoryRecipes: Object
-    actions: Actions
-    navigation: Navigation
-    route: { params: { categoryName: string } }
-}
 
 let categoryRecipeIndex: number = 0;
 
@@ -60,6 +17,7 @@ function Category({
   recipes, categoryRecipes, actions, navigation, route: { params: { categoryName } },
 } : Props) {
   const { height } = Dimensions.get('window');
+
   const recipePhotoHeight = +(height - 114).toFixed();
   const linearGradientBoxHeight = height - 280;
 
@@ -84,6 +42,7 @@ function Category({
             recipe: categoryRecipes[index],
           });
         }}
+        testID={`navigateToDetail${index}`}
       >
         <View>
           <Image
@@ -108,6 +67,7 @@ function Category({
       addRecipeToScrollView(index);
     });
   }
+
   useEffect(() => {
     if (Object.keys(recipes).length) {
       for (categoryRecipeIndex = 0; categoryRecipeIndex < 3; categoryRecipeIndex += 1) {
@@ -117,7 +77,7 @@ function Category({
   }, [Object.keys(recipes).length]);
 
   return (
-    <View style={{ marginTop: StatusBar.currentHeight }}>
+    <View style={{ marginTop: StatusBar.currentHeight }} testID="categoryComponent">
       <StatusBar backgroundColor="black" barStyle="light-content" translucent />
       <View style={styles.header}>
         <Text style={{ color: 'white', fontSize: 25 }}>
@@ -147,6 +107,7 @@ function Category({
             categoryRecipeIndex += 1;
           }
         }}
+        testID="infiniteScroll"
       >
         {recipesJSX.length ? recipesJSX : <ActivityIndicator color="black" style={{ marginTop: height / 2 - 30 }} size={60} />}
       </ScrollView>

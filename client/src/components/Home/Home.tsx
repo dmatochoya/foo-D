@@ -1,63 +1,20 @@
 // @ts-nocheck
 import React, { useEffect } from 'react';
 import {
-  View, Text, StatusBar, StyleSheet, Dimensions, Image, TouchableWithoutFeedback, ScrollView,
+  View, Text, StatusBar, Dimensions, Image, TouchableWithoutFeedback, ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import Props from '../Interfaces/HomeInterfaces';
+import styles from './HomeStyles';
 import { getRecipeFromAPI } from '../../redux/actions/recipesActions';
 import { isUserSelectingMenu } from '../../redux/actions/userActions';
 
-const styles = StyleSheet.create({
-  header: {
-    position: 'absolute',
-    top: 0,
-    zIndex: 1,
-    width: '100%',
-    height: 50,
-    backgroundColor: 'rgb(230, 84, 84)',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  linearGradientBox: {
-    position: 'absolute',
-    backgroundColor: ' rgba(250, 250, 250, 0.4)',
-    width: '100%',
-    height: 240,
-    alignItems: 'center',
-    padding: 10,
-  },
-  recipeName: {
-    color: 'black',
-    fontSize: 30,
-    fontWeight: 'bold',
-    textShadowColor: 'rgba(250, 250, 250, 0.4)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
-    textAlign: 'center',
-  },
-});
-
-interface Recipe {
-    strMealThumb: string
-    strMeal: string
-}
-
-interface Navigation {
-    navigate(route: string, data: object): void
-}
-
-interface Props {
-    recipes: Array<Recipe>
-    actions: Object
-    navigation: Navigation
-}
-
 function Home({ recipes, actions, navigation }: Props) {
   actions.isUserSelectingMenu(false);
-  console.ignoredYellowBox = ['Setting a timer'];
   const { height } = Dimensions.get('window');
+
   const recipePhotoHeight = +(height - 114).toFixed();
   const linearGradientBoxHeight = height - 280;
 
@@ -80,8 +37,9 @@ function Home({ recipes, actions, navigation }: Props) {
         onPress={() => navigation.navigate('detail', {
           recipe: recipes[index],
         })}
+        testID="navigateToDetail"
       >
-        <View testID="recipeTest">
+        <View>
           <Image
             style={{ height: recipePhotoHeight, position: 'relative', top: 50 }}
             source={{ uri: recipePhotoUri }}
@@ -114,7 +72,7 @@ function Home({ recipes, actions, navigation }: Props) {
   }, []);
 
   return (
-    <View style={{ marginTop: StatusBar.currentHeight }} testID="test">
+    <View style={{ marginTop: StatusBar.currentHeight }} testID="homeComponent">
       <StatusBar backgroundColor="black" barStyle="light-content" translucent />
       <View style={styles.header}>
         <Text style={{ color: 'white', fontSize: 25 }}>
@@ -140,6 +98,7 @@ function Home({ recipes, actions, navigation }: Props) {
             actions.getRecipeFromAPI();
           }
         }}
+        testID="infiniteScroll"
       >
         {recipesJSX}
       </ScrollView>

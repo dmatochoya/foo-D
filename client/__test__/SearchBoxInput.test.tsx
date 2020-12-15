@@ -1,13 +1,14 @@
+// @ts-nocheck
 import * as React from 'react';
 import 'react-native';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { render, fireEvent } from '@testing-library/react-native';
-import TextInput from './TextInput';
-import { getRecipeByNameFromAPI, restoreSearchReducer } from '../../redux/actions/recipesActions';
+import SearchBoxInput from '../src/components/TextInput/SearchBoxInput';
+import { getRecipeByNameFromAPI, restoreSearchReducer } from '../src/redux/actions/recipesActions';
 
-jest.mock('../../redux/actions/recipesActions');
+jest.mock('../src/redux/actions/recipesActions');
 const flushPromises = () => new Promise((resolve) => process.nextTick(resolve));
 
 const buildStore = configureStore([thunk]);
@@ -31,27 +32,29 @@ describe('Search', () => {
     jest.clearAllMocks();
   });
 
-  it("should change TextInput's value from empty string and, accordingly, onSubmitEdditing, call getRecipeByNameFromAPI", async () => {
+  it("should change TextInput's value from empty string and, accordingly, onSubmitEdditing, call getRecipeByNameFromAPI", () => {
+    jest.useFakeTimers();
     const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: { name: 'buns', status: 'not found' } };
     wrapper = wrapperFactory(initialState);
+    jest.runAllTimers();
 
-    const { getByTestId } = await render(<TextInput navigation={navigation} />, { wrapper });
-    await flushPromises();
+    const { getByTestId } = render(<SearchBoxInput navigation={navigation} />, { wrapper });
+    flushPromises();
 
-    jest.useFakeTimers();
     const searchBoxInput = getByTestId('searchBoxInput');
     fireEvent(searchBoxInput, 'onChangeText', 'Buns');
     fireEvent(searchBoxInput, 'onSubmitEditing');
+
     expect(getRecipeByNameFromAPI).toHaveBeenCalled();
     expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1000);
-    expect(setTimeout).toHaveBeenCalledTimes(1);
+    expect(setTimeout).toHaveBeenCalledTimes(2);
   });
 
   it('should change placeholder text onFocus', () => {
     const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: { name: 'buns', status: 'not found' } };
     wrapper = wrapperFactory(initialState);
 
-    const { getByTestId } = render(<TextInput navigation={navigation} />, { wrapper });
+    const { getByTestId } = render(<SearchBoxInput navigation={navigation} />, { wrapper });
     const searchBoxInput = getByTestId('searchBoxInput');
     fireEvent(searchBoxInput, 'onFocus');
   });
@@ -60,7 +63,7 @@ describe('Search', () => {
     const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: { name: 'buns', status: 'not found' } };
     wrapper = wrapperFactory(initialState);
 
-    const { getByTestId } = render(<TextInput navigation={navigation} />, { wrapper });
+    const { getByTestId } = render(<SearchBoxInput navigation={navigation} />, { wrapper });
     const searchBoxInput = getByTestId('searchBoxInput');
     fireEvent(searchBoxInput, 'onFocus');
   });
@@ -69,7 +72,7 @@ describe('Search', () => {
     const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: {} };
     wrapper = wrapperFactory(initialState);
 
-    render(<TextInput navigation={navigation} />, { wrapper });
+    render(<SearchBoxInput navigation={navigation} />, { wrapper });
 
     expect(restoreSearchReducer).toHaveBeenCalled();
   });
@@ -78,7 +81,7 @@ describe('Search', () => {
     const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: {} };
     wrapper = wrapperFactory(initialState);
 
-    const { getByTestId } = render(<TextInput navigation={navigation} />, { wrapper });
+    const { getByTestId } = render(<SearchBoxInput navigation={navigation} />, { wrapper });
     const searchBoxInput = getByTestId('searchBoxInput');
     fireEvent(searchBoxInput, 'onSubmitEditing');
 

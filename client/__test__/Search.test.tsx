@@ -5,10 +5,10 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { render, fireEvent } from '@testing-library/react-native';
-import Search from './Search';
-import { getCategoryRecipesFromAPI, restoreCategoryRecipesReducer } from '../../redux/actions/recipesActions';
+import Search from '../src/components/Search/Search';
+import { getCategoryRecipesFromAPI, restoreCategoryRecipesReducer } from '../src/redux/actions/recipesActions';
 
-jest.mock('../../redux/actions/recipesActions');
+jest.mock('../src/redux/actions/recipesActions');
 
 const buildStore = configureStore([thunk]);
 

@@ -29,6 +29,7 @@ function AddIngredientBoxInput({ searchBoxRef, actions } : Props) {
           setText('');
         }
       }}
+      testID="TextInput"
     />
   );
 }

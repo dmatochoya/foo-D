@@ -3,81 +3,20 @@ import React, {
   useEffect, useRef, useState,
 } from 'react';
 import {
-  StyleSheet, View, Text, StatusBar, Dimensions, ScrollView, Alert,
+  View, Text, StatusBar, Dimensions, ScrollView, Alert,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import Props from '../Interfaces/ListInterfaces';
+import styles from './ListStyles';
 import {
   deleteProductFromGorceryList, deleteAllProductsFromGorceryList,
   crossOverProductFromGorceryList, updateGroceryListInDB,
 } from '../../redux/actions/groceryListActions';
 import AddIngredientBoxInput from './TextInput';
-
-const styles = StyleSheet.create({
-  header: {
-    position: 'relative',
-    top: 0,
-    zIndex: 1,
-    width: '100%',
-    backgroundColor: 'rgb(230, 84, 84)',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  headerTitleAndIconContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingRight: 5,
-  },
-  inputBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-  },
-  sectionTitleContainer: {
-    marginTop: 17,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    backgroundColor: 'rgb(161, 117, 81)',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  ingredientContainer: {
-    marginHorizontal: 20,
-    paddingVertical: 12,
-    borderBottomWidth: 0.2,
-    marginVertical: 1,
-    position: 'relative',
-  },
-});
-
-interface Actions {
-    updateGroceryListInDB(user: Object, groceryList: Object): void
-    deleteProductFromGorceryList(foodGroupItem: string): void
-    deleteAllProductsFromGorceryList(): void
-    crossOverProductFromGorceryList(object: Object): void
-}
-
-interface Product {
-  product: string
-  type: string
-  amount: number
-  isCrossed: boolean
-}
-
-interface Props {
-  groceryList: Object
-  user: Object
-  actions: Actions
-}
 
 function List({ groceryList, user, actions } : Props) {
   const searchBoxRef = useRef();
@@ -200,7 +139,7 @@ function List({ groceryList, user, actions } : Props) {
   );
 
   return (
-    <View style={{ marginTop: StatusBar.currentHeight, flex: 1 }}>
+    <View style={{ marginTop: StatusBar.currentHeight, flex: 1 }} testID="listComponent">
       <StatusBar backgroundColor="black" barStyle="light-content" translucent />
       <View style={styles.header}>
         <View style={styles.headerTitleAndIconContainer}>

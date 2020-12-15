@@ -1,11 +1,39 @@
+// @ts-nocheck
 import React, { useEffect } from 'react';
 import {
-  StyleSheet, View, ActivityIndicator, StatusBar, AsyncStorage,
+  StyleSheet, View, ActivityIndicator, StatusBar,
 } from 'react-native';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { isUserLoggedIn, getUserFromDB } from '../../redux/actions/userActions';
+
+function LoadingScreen({ navigation, actions } : { navigation: Object, actions: Object}) {
+  const checkIfLoggedIn = () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        actions.getUserFromDB(user.uid);
+        actions.isUserLoggedIn(true);
+        navigation.navigate('home');
+      } else {
+        navigation.navigate('loginScreen');
+      }
+    });
+  };
+
+  useEffect(() => {
+    checkIfLoggedIn();
+  }, []);
+
+  return (
+    <>
+      <StatusBar backgroundColor="black" barStyle="light-content" translucent />
+      <View style={styles.container} testID="loadingComponent">
+        <ActivityIndicator size={60} color="black" />
+      </View>
+    </>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -14,34 +42,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-function LoadingScreen({ navigation, actions } : { navigation: Object, actions: Object}) {
-  const checkIfLoggedIn = () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      setTimeout(() => {
-        if (user) {
-          actions.getUserFromDB(user.uid);
-          actions.isUserLoggedIn(true);
-          navigation.navigate('home');
-        } else {
-          navigation.navigate('loginScreen');
-        }
-      }, 2000);
-    });
-  };
-
-  useEffect(() => {
-    checkIfLoggedIn();
-  }, []);
-  return (
-    <>
-      <StatusBar backgroundColor="black" barStyle="light-content" translucent />
-      <View style={styles.container}>
-        <ActivityIndicator size={60} color="black" />
-      </View>
-    </>
-  );
-}
 
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {

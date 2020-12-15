@@ -65,13 +65,25 @@ function userController(User) {
         );
     }
 
+    function putOwnRecipe(req, res) {
+        const {body} = req;
+        function callback(error, updatedUser) {
+            return error ? res.send(error) : res.send(updatedUser);
+        }
+
+        User.findOneAndUpdate(
+            body.user.id, body.user, { new: true }, callback,
+        );
+    }
+
   return {
     getMethod,
     postMethod,
     putFavoriteRecipe,
     deleteFavoriteRecipe,
     putListItem,
-    putMenu
+    putMenu,
+    putOwnRecipe
   };
 }
 

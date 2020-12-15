@@ -3,23 +3,13 @@ import React from 'react';
 import {
   StyleSheet, View, Image, Text, Pressable,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
 import * as Google from 'expo-google-app-auth';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { isUserLoggedIn, postUserInDB, getUserFromDB } from '../../redux/actions/userActions';
 
 const googleLogo = require('../../../assets/googleLogo.png');
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 interface ProviderData {
   providerId: string
@@ -37,6 +27,7 @@ function LoginScreen({ actions } : { actions: Object}) {
   firebaseUser: Firebase) {
     if (firebaseUser) {
       const { providerData } = firebaseUser;
+
       for (let i = 0; i < providerData.length; i += 1) {
         if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID
                 && providerData[i].uid === googleUser.getBasicProfile().getId()) {
@@ -46,8 +37,8 @@ function LoginScreen({ actions } : { actions: Object}) {
     }
     return false;
   }
+
   function onSignIn(googleUser: Object) {
-    console.log('Google Auth Response', googleUser);
     const unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
       unsubscribe();
       if (!isUserEqual(googleUser, firebaseUser)) {
@@ -80,15 +71,14 @@ function LoginScreen({ actions } : { actions: Object}) {
           }
         }).then(() => { actions.isUserLoggedIn(true); })
           .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            const { email } = error;
+            console.log(error);
           });
       } else {
         console.log('User already signed-in Firebase.');
       }
     });
   }
+
   const signInWithGoogleAsync = async () => {
     try {
       const result = await Google.logInAsync({
@@ -101,26 +91,15 @@ function LoginScreen({ actions } : { actions: Object}) {
         return result.accessToken;
       }
       return { cancelled: true };
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
       return { error: true };
     }
   };
+
   return (
     <View style={[styles.container, { backgroundColor: 'rgb(230, 84, 84)' }]}>
       <Pressable
-        style={({ pressed }) => [
-          {
-            backgroundColor: 'white',
-            borderColor: 'black',
-            borderWidth: pressed ? 1 : 0,
-            flexDirection: 'row',
-            borderRadius: 7,
-            alignItems: 'center',
-            width: 220,
-            padding: 5,
-          },
-        ]}
+        style={({ pressed }) => [styles.loginButton, { borderWidth: pressed ? 1 : 0 }]}
         onPress={() => signInWithGoogleAsync()}
       >
         <>
@@ -131,6 +110,23 @@ function LoginScreen({ actions } : { actions: Object}) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginButton: {
+    backgroundColor: 'white',
+    borderColor: 'black',
+    flexDirection: 'row',
+    borderRadius: 7,
+    alignItems: 'center',
+    width: 220,
+    padding: 5,
+  },
+});
 
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {

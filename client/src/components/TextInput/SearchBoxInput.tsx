@@ -2,24 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import Props from '../Interfaces/SearchBoxInterfaces';
 import { getRecipeByNameFromAPI, restoreSearchReducer } from '../../redux/actions/recipesActions';
-
-interface Actions {
-    getRecipeByNameFromAPI(text : string, boolean: boolean) : void
-    restoreSearchReducer() : void
-}
-
-interface Navigation {
-    navigate(route: string, data: object): void
-  }
-
-interface Props {
-    searchBoxRef(): void
-    actions: Actions
-    navigation: Navigation
-    recipe: object
-    noResults: boolean
-}
 
 function SearchBoxInput({
   searchBoxRef, actions, navigation, recipe, noResults,
@@ -45,6 +29,7 @@ function SearchBoxInput({
         recipe,
       });
     }
+
     actions.restoreSearchReducer();
   }, [Object.keys(recipe).length]);
 

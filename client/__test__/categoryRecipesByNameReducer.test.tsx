@@ -1,5 +1,5 @@
-import reducer from './categoryRecipesByNameReducer';
-import actionTypes from '../actions/actionTypes';
+import reducer from '../src/redux/reducers/categoryRecipesByNameReducer';
+import actionTypes from '../src/redux/actions/actionTypes';
 
 describe('categoryRecipesByNameReducer', () => {
   it('should return the initial state', () => {

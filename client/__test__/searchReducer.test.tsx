@@ -1,5 +1,6 @@
-import reducer from './searchReducer';
-import actionTypes from '../actions/actionTypes';
+// @ts-nocheck
+import reducer from '../src/redux/reducers/searchReducer';
+import actionTypes from '../src/redux/actions/actionTypes';
 
 describe('searchReducer', () => {
   it('should return the initial state', () => {

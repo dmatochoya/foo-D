@@ -1,41 +1,24 @@
-import { useIsFocused } from '@react-navigation/native';
+// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  StyleSheet, Text, View, StatusBar, Dimensions, Animated, Image, TouchableWithoutFeedback,
+  StyleSheet, Text, View, StatusBar, Dimensions,
+  Animated, Image, TouchableWithoutFeedback, ScrollView,
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import styles from './CalendarStyles';
 import { isUserSelectingMenu } from '../../redux/actions/userActions';
 
-const styles = StyleSheet.create({
-  header: {
-    position: 'absolute',
-    top: 0,
-    zIndex: 1,
-    width: '100%',
-    height: 50,
-    backgroundColor: 'rgb(230, 84, 84)',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-let swipped = false;
 let swipeCalendarPosition = 0;
 let firstTimeEntering = true;
+let swipped = false;
+
 function Calendar({ user, actions, navigation }
   : { user: Object, actions: Object, navigation: Object}) {
-  const isFocused = useIsFocused();
-  // console.log(user, 'calendarrrr');
-
-  // if (isFocused) {
-  //   actions.isUserSelectingMenu(false);
-  // }
-
-  const { width, height } = Dimensions.get('window');
+  const { width } = Dimensions.get('window');
   let currentPositionInCalendar = 2;
+
   const now = new Date();
   const daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const monthsAndLength = [
@@ -86,7 +69,6 @@ function Calendar({ user, actions, navigation }
   };
 
   const currentDate = getCurrentDate();
-  // const [date, sateDate] = useState(currentDate);
 
   const calendar: JSX.Element[] = [];
   const days: Object[] = [];
@@ -94,7 +76,7 @@ function Calendar({ user, actions, navigation }
   const calendarDaysBackgroundColor: { [x: string]: string; }[] = [];
 
   const generateCalendar = () => {
-    if (currentDate.weekOfTheMonth === 2 || currentDate.weekOfTheMonth === 4) {
+    if (currentDate.weekOfTheMonth === 1 || currentDate.weekOfTheMonth === 3) {
       const arrayOfMonths: number[] = [];
       const firstMonthNumber = now.getMonth();
       let monthNumber = firstMonthNumber;
@@ -251,11 +233,11 @@ function Calendar({ user, actions, navigation }
 
   const swipeCalendar = async (toTheLeft: boolean, initialEffect: boolean) => {
     if (toTheLeft) {
-      if (currentPositionInCalendar !== calendar.length - 2) {
+      if (currentPositionInCalendar !== calendar.length - 3) {
         currentPositionInCalendar += 1;
-        swipeCalendarPosition -= initialEffect ? width * 2 : width;
+        swipeCalendarPosition -= initialEffect ? width * 3 : width;
       }
-    } else if (currentPositionInCalendar) {
+    } else if (currentPositionInCalendar + 1) {
       swipeCalendarPosition += width;
       currentPositionInCalendar -= 1;
     }
@@ -278,9 +260,8 @@ function Calendar({ user, actions, navigation }
   }
 
   const dateMarked = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
-  console.log(dateMarked);
-  const menuFound = user.menus.find((menu) => Object.keys(menu)[0] === dateMarked);
-  console.log(menuFound);
+  const menuFound = user.menus.find((menu: Object) => Object.keys(menu)[0] === dateMarked);
+
   return (
     <View style={{ marginTop: StatusBar.currentHeight }} testID="test">
       <StatusBar backgroundColor="black" barStyle="light-content" translucent />
@@ -302,8 +283,63 @@ function Calendar({ user, actions, navigation }
           {calendar}
         </Animated.View>
       </GestureRecognizer>
-      <View>
-        {menuFound ? <Text>Yasssss</Text>
+      <>
+        {menuFound ? (
+          <>
+            <View style={{ height: 20, borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth }} />
+            <ScrollView
+              style={{
+                marginBottom: 210, paddingTop: 5,
+              }}
+              showsVerticalScrollIndicator={false}
+            >
+              <View style={{ paddingBottom: 40 }}>
+                {['Breakfast', 'Lunch', 'Dinner'].map((menu) => (
+                  <View key={Math.random() * Date.now()}>
+                    <Text style={styles.sectionTitle}>
+                      {menu}
+                    </Text>
+                    {Object.keys(menuFound[Object.keys(menuFound)[0]])
+                      .map((recipe) => (menuFound[Object.keys(menuFound)[0]][recipe]
+                        .addedTo === menu
+                        ? (
+                          <View style={{ alignItems: 'center' }} key={Math.random() * Date.now()}>
+                            <TouchableWithoutFeedback onPress={() => navigation.navigate('detail',
+                              { recipe: menuFound[Object.keys(menuFound)[0]][recipe].recipe })}
+                            >
+                              <View
+                                style={[styles.menuCard, { flexDirection: 'row', width: width - 30, position: 'relative' }]}
+                              >
+                                <Image
+                                  style={{
+                                    height: 100, width: 155, borderRadius: 5, marginRight: 15,
+                                  }}
+                                  source={{
+                                    uri: menuFound[Object.keys(menuFound)[0]][recipe]
+                                      .recipe.strMealThumb,
+                                  }}
+                                />
+                                <View style={{
+                                  flexGrow: 1, paddingRight: 15, justifyContent: 'center', flexDirection: 'row',
+                                }}
+                                >
+                                  <Text style={{
+                                    fontSize: 20, flex: 1, flexWrap: 'wrap', textAlign: 'center', marginTop: 5,
+                                  }}
+                                  >
+                                    {menuFound[Object.keys(menuFound)[0]][recipe].recipe.strMeal}
+                                  </Text>
+                                </View>
+                              </View>
+                            </TouchableWithoutFeedback>
+                          </View>
+                        ) : null))}
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+          </>
+        )
           : (
             <>
               <View style={{ alignItems: 'flex-end', padding: 20 }}>
@@ -334,7 +370,7 @@ function Calendar({ user, actions, navigation }
                   fontSize: 20, width: 240, textAlign: 'center', position: 'relative', top: 55, lineHeight: 30,
                 }}
                 >
-                  No recipes on this day. Add one!
+                  No menu on this day. Add one!
                 </Text>
               </View>
               <View style={{
@@ -352,7 +388,7 @@ function Calendar({ user, actions, navigation }
               </View>
             </>
           )}
-      </View>
+      </>
     </View>
   );
 }

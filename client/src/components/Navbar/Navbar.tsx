@@ -3,6 +3,26 @@ import { StyleSheet, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import * as RootNavigation from '../../../RootNavigation';
 
+const Navbar = React.memo((): JSX.Element => {
+  const navbarIcons = ['home', 'search', 'list', 'person', 'calendar'];
+
+  return (
+    <View style={styles.navbarContainer}>
+      {navbarIcons.map((iconName) => (
+        <Icon
+          onPress={() => RootNavigation.navigate(iconName, null)}
+          size={30}
+          color="white"
+          name={`ios-${iconName}`}
+          type="ionicon"
+          testID={iconName}
+          key={Math.random() * Date.now()}
+        />
+      ))}
+    </View>
+  );
+});
+
 const styles = StyleSheet.create({
   navbarContainer: {
     position: 'absolute',
@@ -14,17 +34,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     backgroundColor: 'black',
   },
-});
-
-const Navbar = React.memo((): JSX.Element => {
-  const navbarIcons = ['home', 'search', 'list', 'person', 'calendar'];
-  return (
-    <View style={styles.navbarContainer}>
-      {navbarIcons.map((iconName) => (
-        <Icon key={Math.random() * Date.now()} onPress={() => RootNavigation.navigate(iconName, null)} size={30} color="white" name={`ios-${iconName}`} type="ionicon" testID={iconName} />
-      ))}
-    </View>
-  );
 });
 
 export default Navbar;

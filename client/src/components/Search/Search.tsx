@@ -1,108 +1,21 @@
 // @ts-nocheck
 import React, { useRef, useState, useEffect } from 'react';
 import {
-  StyleSheet, View, Text, StatusBar, Image, ScrollView,
+  View, Text, StatusBar, Image, ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import Props from '../Interfaces/SearchInterfaces';
+import styles from './SearchSTyles';
 import {
   restoreSearchReducer,
-  getCategoryRecipesFromAPI, restoreCategoryRecipeByNameReducer, restoreCategoryRecipesReducer,
+  getCategoryRecipesFromAPI,
+  restoreCategoryRecipeByNameReducer,
+  restoreCategoryRecipesReducer,
 } from '../../redux/actions/recipesActions';
-import SearchBoxInput from './TextInput';
-
-const styles = StyleSheet.create({
-  header: {
-    position: 'relative',
-    top: 0,
-    zIndex: 1,
-    width: '100%',
-    backgroundColor: 'rgb(230, 84, 84)',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  searchBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-  },
-  categoriesSectionWrapper: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: 5,
-    marginBottom: 160,
-  },
-  sectionTitle: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 15,
-    marginBottom: 13,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    paddingBottom: 15,
-    color: 'black',
-  },
-  categoryWrapper: {
-    width: '50%',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 1,
-  },
-  categoryContainer: {
-    elevation: 10,
-    width: 180,
-    height: 105,
-    marginTop: 13,
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  categoryName: {
-    fontSize: 20,
-    position: 'relative',
-    top: 15,
-    color: 'rgb(44, 42, 40)',
-  },
-  categoryImage: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    resizeMode: 'contain',
-    position: 'relative',
-    top: 1,
-  },
-});
-
-interface Category {
-  strCategory: string
-  strCategoryThumb: string
-}
-
-interface Categories {
-  categories: Category[]
-}
-
-interface Navigation {
-  navigate(route: string, data: object): void
-}
-
-interface Actions {
-  restoreSearchReducer(): void
-  getCategoryRecipesFromAPI(text: string): void
-  restoreCategoryRecipeByNameReducer(): void
-  restoreCategoryRecipesReducer(): void
-}
-
-interface Props {
-  categories: Categories
-  actions: Actions
-  navigation: Navigation
-}
+import SearchBoxInput from '../TextInput/SearchBoxInput';
 
 function Search({ categories, actions, navigation } : Props) {
   const searchBoxRef = useRef();
@@ -137,39 +50,41 @@ function Search({ categories, actions, navigation } : Props) {
           style={styles.categoriesSectionWrapper}
           testID="categoriesSectionWrapper"
         >
-          {categories?.categories.filter((category) => category.strCategory !== 'Goat' && category.strCategory !== 'Side').map((category) => (
-            <View
-              key={Math.random() * Date.now()}
-              style={styles.categoryWrapper}
-              onTouchStart={() => {
-                actions.restoreCategoryRecipeByNameReducer();
-                actions.restoreCategoryRecipesReducer();
-              }}
-              onTouchEnd={() => {
-                setNoResults(true);
-                actions.getCategoryRecipesFromAPI(category.strCategory);
-                navigation.navigate('category', {
-                  categoryName: category.strCategory,
-                });
-              }}
-              testID="categoryWrapper"
-            >
-              <LinearGradient
-                start={{ x: 0, y: 1 }}
-                end={{ x: 1, y: 0 }}
-                colors={['rgb(236, 154, 60)', 'rgb(235, 157, 69)']}
-                style={styles.categoryContainer}
+          {categories?.categories
+            .filter((category) => category.strCategory !== 'Goat' && category.strCategory !== 'Side')
+            .map((category) => (
+              <View
+                key={Math.random() * Date.now()}
+                style={styles.categoryWrapper}
+                onTouchStart={() => {
+                  actions.restoreCategoryRecipeByNameReducer();
+                  actions.restoreCategoryRecipesReducer();
+                }}
+                onTouchEnd={() => {
+                  setNoResults(true);
+                  actions.getCategoryRecipesFromAPI(category.strCategory);
+                  navigation.navigate('category', {
+                    categoryName: category.strCategory,
+                  });
+                }}
+                testID="categoryWrapper"
               >
-                <Text style={styles.categoryName}>
-                  {category.strCategory.toUpperCase()}
-                </Text>
-                <Image
-                  style={styles.categoryImage}
-                  source={{ uri: category.strCategoryThumb }}
-                />
-              </LinearGradient>
-            </View>
-          ))}
+                <LinearGradient
+                  start={{ x: 0, y: 1 }}
+                  end={{ x: 1, y: 0 }}
+                  colors={['rgb(236, 154, 60)', 'rgb(235, 157, 69)']}
+                  style={styles.categoryContainer}
+                >
+                  <Text style={styles.categoryName}>
+                    {category.strCategory.toUpperCase()}
+                  </Text>
+                  <Image
+                    style={styles.categoryImage}
+                    source={{ uri: category.strCategoryThumb }}
+                  />
+                </LinearGradient>
+              </View>
+            ))}
         </View>
       </ScrollView>
     </View>

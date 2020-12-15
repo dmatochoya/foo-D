@@ -1,8 +1,9 @@
+// @ts-nocheck
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import axios from 'axios';
-import actionTypes from './actionTypes';
-import * as actions from './recipesActions';
+import actionTypes from '../src/redux/actions/actionTypes';
+import * as actions from '../src/redux/actions/recipesActions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

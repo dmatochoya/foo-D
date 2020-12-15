@@ -1,5 +1,9 @@
+interface Recipe {
+  meals: Object[]
+}
+
 export default function searchReducer(state = {}, action :
-    { type: string; recipe?: Object; message?: object }) {
+    { type: string; recipe?: Recipe; message?: object }) {
   switch (action.type) {
     case 'GET_RECIPE_BY_NAME':
       return action.recipe?.meals[0];

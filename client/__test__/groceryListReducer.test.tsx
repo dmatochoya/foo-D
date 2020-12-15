@@ -1,5 +1,6 @@
-import reducer from './groceryListReducer';
-import actionTypes from '../actions/actionTypes';
+// @ts-nocheck
+import reducer from '../src/redux/reducers/groceryListReducer';
+import actionTypes from '../src/redux/actions/actionTypes';
 
 describe('groceryListReducer', () => {
   it('should return the initial state', () => {

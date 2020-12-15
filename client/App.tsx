@@ -7,25 +7,24 @@ import { LogBox } from 'react-native';
 import Navigation from './Navigation';
 import configureStore from './src/redux/configureStore';
 import { getRecipeCategoriesFromAPI } from './src/redux/actions/recipesActions';
-import { isUserSelectingMenu } from './src/redux/actions/userActions';
 import firebaseConfig from './config';
-
-LogBox.ignoreAllLogs();
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-} else {
-  firebase.app();
-}
 
 const store = configureStore({});
 
 store.dispatch(getRecipeCategoriesFromAPI());
 
 export default function App() {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  } else {
+    firebase.app();
+  }
+
   return (
     <ReduxProvider store={store}>
       <Navigation />
     </ReduxProvider>
   );
 }
+
+LogBox.ignoreAllLogs();

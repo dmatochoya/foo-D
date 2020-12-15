@@ -1,8 +1,10 @@
+// @ts-nocheck
+
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import axios from 'axios';
-import actionTypes from './actionTypes';
-import * as actions from './groceryListActions';
+import actionTypes from '../src/redux/actions/actionTypes';
+import * as actions from '../src/redux/actions/groceryListActions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -31,7 +33,9 @@ describe('groceryListActions', () => {
 
     expect(store.getActions()).toEqual([{
       type: actionTypes.GET_PRODUCT_TYPE,
-      product: [{ product, type: 'uncategorized' }],
+      product: [{
+        product, type: 'uncategorized', amount: 1, isCrossed: false,
+      }],
     }]);
   });
 
@@ -46,7 +50,9 @@ describe('groceryListActions', () => {
 
     expect(store.getActions()).toEqual([{
       type: actionTypes.GET_PRODUCT_TYPE,
-      product: [{ product, type: 'pasta' }],
+      product: [{
+        product, type: 'pasta', amount: 1, isCrossed: false,
+      }],
     }]);
   });
 
@@ -78,5 +84,44 @@ describe('groceryListActions', () => {
       type: actionTypes.DELETE_PRODUCT,
       productName,
     }]);
+  });
+
+  it('should call crossOverProductFromGorceryList and modify the store actions accordingly', () => {
+    const product = 'apple';
+
+    store.dispatch(actions.crossOverProductFromGorceryList(product));
+
+    expect(store.getActions()).toEqual([{
+      type: actionTypes.CROSS_OVER_PRODUCT,
+      product,
+    }]);
+  });
+
+  it('should call updateGroceryListInDB and modify the store actions on resolve accordingly with data being an array with content', async () => {
+    const user = null;
+    const groceryList = null;
+    const response = {
+      data: { name: 'David' },
+    };
+
+    axios.put.mockImplementationOnce(() => Promise.resolve(response));
+    await store.dispatch(actions.updateGroceryListInDB(user, groceryList));
+
+    expect(store.getActions()).toEqual([{
+      type: actionTypes.UPDATE_USER_GROCERY_LIST,
+      user: response.data,
+    }]);
+  });
+
+  it('should call updateGroceryListInDB and, on reject, call console.log', async () => {
+    const user = null;
+    const groceryList = null;
+    const error = 'Mock error';
+    jest.spyOn(global.console, 'log');
+
+    axios.put.mockImplementationOnce(() => Promise.reject(error));
+    await store.dispatch(actions.updateGroceryListInDB(user, groceryList));
+
+    expect(console.log).toHaveBeenCalled();
   });
 });

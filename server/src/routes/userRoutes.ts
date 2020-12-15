@@ -20,6 +20,9 @@ function userRouter(User) {
   router.route('/menu')
     .put(user.putMenu)
 
+  router.route('/myrecipes')
+    .put(user.putOwnRecipe)
+
   return router;
 }
 

@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import axios from 'axios';
 import actionTypes from './actionTypes';
 
@@ -69,6 +68,17 @@ export function addToFavoriteRecipes(user: object, recipe: object) {
   return async (dispatch: (arg0: { type: string; user: object }) => void) => {
     try {
       const { data } = await axios.put(`${userUrl}/favorite`, { user, recipe });
+      dispatch(addOrRemoveFavoriteRecipeToUser(data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export function addOwnRecipe(user: object) {
+  return async (dispatch: (arg0: { type: string; user: object }) => void) => {
+    try {
+      const { data } = await axios.put(`${userUrl}/myrecipes`, { user });
       dispatch(addOrRemoveFavoriteRecipeToUser(data));
     } catch (error) {
       console.log(error);
