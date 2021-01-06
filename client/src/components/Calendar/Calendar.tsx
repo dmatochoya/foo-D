@@ -36,26 +36,6 @@ function Calendar({ user, actions, navigation }
     { month: 'December', length: 31 },
   ];
 
-  // const getWeekOfTheMonth = (dayOfTheWeekNumber: number, dayOfTheMonth: number): number | void => {
-  //   const month = now.getMonth();
-  //   const year = now.getFullYear();
-  //   const checkDate = new Date(year, month, dayOfTheMonth);
-  //   const checkDateTime = checkDate.getTime();
-  //   let currentWeek = 0;
-
-  //   for (let i = 1; i < 32; i += 1) {
-  //     const loopDate = new Date(year, month, i);
-
-  //     if (loopDate.getDay() === dayOfTheWeekNumber) {
-  //       currentWeek += 1;
-  //     }
-
-  //     if (loopDate.getTime() === checkDateTime) {
-  //       return currentWeek;
-  //     }
-  //   }
-  // };
-
   const getCurrentDate = () => {
     const { month } = monthsAndLength[now.getMonth()];
     const dayOfTheMonth = now.getDate();
@@ -73,6 +53,7 @@ function Calendar({ user, actions, navigation }
   const days: Object[] = [];
   const [calendarDayBackgroundColor, setCalendarDayBackgroundColor] = useState<Object>({});
   const calendarDaysBackgroundColor: { [x: string]: string; }[] = [];
+  let initialPosition;
 
   const generateCalendar = () => {
     const arrayOfMonths: number[] = [];
@@ -175,7 +156,7 @@ function Calendar({ user, actions, navigation }
                     {day.day}
                   </Text>
                   <Text style={{ fontSize: 0 }}>
-                    {currentDate.month === monthName && currentDate.dayOfTheMonth === day.day ? calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'black' }) : calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'rgb(58, 58, 58)' })}
+                    {currentDate.month === monthName && currentDate.dayOfTheMonth === day.day ? (initialPosition = i, calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'black' })) : calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'rgb(58, 58, 58)' })}
                   </Text>
                 </View>
               </TouchableWithoutFeedback>
@@ -204,7 +185,9 @@ function Calendar({ user, actions, navigation }
                     {day.day}
                   </Text>
                   <Text style={{ fontSize: 0 }}>
-                    {currentDate.month === monthName && currentDate.dayOfTheMonth === day.day ? calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'black' }) : calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'rgb(58, 58, 58)' })}
+                    {currentDate.month === monthName && currentDate.dayOfTheMonth === day.day
+                      ? (calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'black' }))
+                      : calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'rgb(58, 58, 58)' })}
                   </Text>
                 </View>
               </TouchableWithoutFeedback>
@@ -218,7 +201,6 @@ function Calendar({ user, actions, navigation }
       firstDayOfLastWeek += 14;
       lastDayOfLastWeek += 14;
     }
-    // }
   };
 
   useEffect(() => {
@@ -232,9 +214,10 @@ function Calendar({ user, actions, navigation }
 
   const swipeCalendar = async (toTheLeft: boolean, initialEffect: boolean) => {
     if (toTheLeft) {
+      console.log(calendar.length);
       if (currentPositionInCalendar !== calendar.length - 3) {
         currentPositionInCalendar += 1;
-        swipeCalendarPosition -= initialEffect ? width * 3 : width;
+        swipeCalendarPosition -= initialEffect ? width * initialPosition : width;
       }
     } else if (currentPositionInCalendar + 1) {
       swipeCalendarPosition += width;
