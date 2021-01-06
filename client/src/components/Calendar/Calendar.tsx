@@ -12,7 +12,6 @@ import { isUserSelectingMenu } from '../../redux/actions/userActions';
 
 let swipeCalendarPosition = 0;
 let firstTimeEntering = true;
-let swipped = false;
 
 function Calendar({ user, actions, navigation }
   : { user: Object, actions: Object, navigation: Object}) {
@@ -103,6 +102,7 @@ function Calendar({ user, actions, navigation }
     let firstDayOfLastWeek = 7;
     let lastDayOfLastWeek = 14;
     let newMonth;
+
     for (let i = 0; i < days.length / 14; i += 1) {
       const currentCalendarDays: Object[] = days
         .slice(firstDayOfFirstWeek, lastDayOfLastWeek);
@@ -214,12 +214,11 @@ function Calendar({ user, actions, navigation }
 
   const swipeCalendar = async (toTheLeft: boolean, initialEffect: boolean) => {
     if (toTheLeft) {
-      console.log(calendar.length);
-      if (currentPositionInCalendar !== calendar.length - 3) {
+      if (currentPositionInCalendar !== calendar.length - 1) {
         currentPositionInCalendar += 1;
         swipeCalendarPosition -= initialEffect ? width * initialPosition : width;
       }
-    } else if (currentPositionInCalendar + 1) {
+    } else if (currentPositionInCalendar) {
       swipeCalendarPosition += width;
       currentPositionInCalendar -= 1;
     }
@@ -248,14 +247,8 @@ function Calendar({ user, actions, navigation }
     <View style={{ marginTop: StatusBar.currentHeight }} testID="test">
       <StatusBar backgroundColor="black" barStyle="light-content" translucent />
       <GestureRecognizer
-        onSwipeLeft={() => {
-          swipped = true;
-          swipeCalendar(true, false);
-        }}
-        onSwipeRight={() => {
-          swipped = true;
-          swipeCalendar(false, false);
-        }}
+        onSwipeLeft={() => swipeCalendar(true, false)}
+        onSwipeRight={() => swipeCalendar(false, false)}
         style={{ flexDirection: 'row' }}
       >
         <Animated.View
