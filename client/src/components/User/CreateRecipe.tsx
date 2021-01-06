@@ -1,8 +1,10 @@
 // @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import {
-  View, BackHandler, Text, StatusBar, TextInput, Dimensions, ScrollView,
+  View, BackHandler, Text, StatusBar, TextInput, Dimensions, ScrollView, Image,
 } from 'react-native';
+import { Icon } from 'react-native-elements';
+import * as ImagePicker from 'expo-image-picker';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import Props from '../Interfaces/CreateRecipeInterfaces';
@@ -16,6 +18,7 @@ const CreateRecipe = ({
   const [text, setText] = useState({
     title: '', photo: '', ingredients: '', steps: '',
   });
+  const [image, setImage] = useState(null);
 
   const mockRecipe = () => {
     const arrayOfIngredientsAndMeasure = text.ingredients.split('.')
@@ -34,6 +37,18 @@ const CreateRecipe = ({
     }, 500);
   };
 
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+  console.log(image);
   useEffect(() => {
     const goBackAndShowNavbar = (): void => {
       actions.isUserSelectingMenu(false);
@@ -74,18 +89,47 @@ const CreateRecipe = ({
                 <Text style={styles.recipeSectionTitle}>
                   {section.name.toUpperCase()}
                 </Text>
-                <View style={{ alignItems: 'center' }}>
-                  <TextInput
-                    style={[styles.textInput, {
-                      height: section.textInputHeight, textAlignVertical: section.textAlignVertical,
-                    }]}
-                    placeholder={`Add your recipe's ${section.name}`}
-                    onChangeText={(textChange) => setText({ ...text, [section.name]: textChange })}
-                    defaultValue={text[section.name]}
-                    multiline={section.multiline}
-                    numberOfLines={section.numberOfLines}
-                  />
-                </View>
+                {section.name !== 'photo'
+                  ? (
+                    <View style={{ alignItems: 'center' }}>
+                      <TextInput
+                        style={[styles.textInput, {
+                          height: section.textInputHeight, textAlignVertical: section.textAlignVertical,
+                        }]}
+                        placeholder={`Add your recipe's ${section.name}`}
+                        onChangeText={(textChange) => setText({ ...text, [section.name]: textChange })}
+                        defaultValue={text[section.name]}
+                        multiline={section.multiline}
+                        numberOfLines={section.numberOfLines}
+                      />
+                    </View>
+                  )
+                  : (
+                    <View style={{
+                      alignItems: 'center',
+                      paddingHorizontal: 7,
+                      marginVertical: 22,
+                    }}
+                    >
+                      <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        width: '90%',
+                      }}
+                      >
+                        {!image
+                          ? (
+                            <>
+                              <Text style={{ fontSize: 17, color: 'rgba(0, 0, 0, 0.4)', marginRight: 7 }}>Add your recipe's photo: </Text>
+                              <Icon size={30} name="md-photos" type="ionicon" onPress={() => pickImage()} />
+                            </>
+                          )
+                          : <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+                          /* <Text onPress={() => Linking.openURL('/data/user/0/host.exp.exponent/cache/ExperienceData/%2540davidmato%252Fclient/ImagePicker/66c89bf0-600a-4d24-909a-3a8a11678a7f.jpg')}>{image}</Text>} */
+                          }
+                      </View>
+                    </View>
+                  )}
               </View>
             ))}
           </View>

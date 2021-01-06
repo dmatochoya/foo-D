@@ -36,6 +36,26 @@ function Calendar({ user, actions, navigation }
     { month: 'December', length: 31 },
   ];
 
+  // const getWeekOfTheMonth = (dayOfTheWeekNumber: number, dayOfTheMonth: number): number | void => {
+  //   const month = now.getMonth();
+  //   const year = now.getFullYear();
+  //   const checkDate = new Date(year, month, dayOfTheMonth);
+  //   const checkDateTime = checkDate.getTime();
+  //   let currentWeek = 0;
+
+  //   for (let i = 1; i < 32; i += 1) {
+  //     const loopDate = new Date(year, month, i);
+
+  //     if (loopDate.getDay() === dayOfTheWeekNumber) {
+  //       currentWeek += 1;
+  //     }
+
+  //     if (loopDate.getTime() === checkDateTime) {
+  //       return currentWeek;
+  //     }
+  //   }
+  // };
+
   const getCurrentDate = () => {
     const { month } = monthsAndLength[now.getMonth()];
     const dayOfTheMonth = now.getDate();
