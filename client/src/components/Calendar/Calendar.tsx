@@ -36,35 +36,35 @@ function Calendar({ user, actions, navigation }
     { month: 'December', length: 31 },
   ];
 
-  const getWeekOfTheMonth = (dayOfTheWeekNumber: number, dayOfTheMonth: number): number | void => {
-    const month = now.getMonth();
-    const year = now.getFullYear();
-    const checkDate = new Date(year, month, dayOfTheMonth);
-    const checkDateTime = checkDate.getTime();
-    let currentWeek = 0;
+  // const getWeekOfTheMonth = (dayOfTheWeekNumber: number, dayOfTheMonth: number): number | void => {
+  //   const month = now.getMonth();
+  //   const year = now.getFullYear();
+  //   const checkDate = new Date(year, month, dayOfTheMonth);
+  //   const checkDateTime = checkDate.getTime();
+  //   let currentWeek = 0;
 
-    for (let i = 1; i < 32; i += 1) {
-      const loopDate = new Date(year, month, i);
+  //   for (let i = 1; i < 32; i += 1) {
+  //     const loopDate = new Date(year, month, i);
 
-      if (loopDate.getDay() === dayOfTheWeekNumber) {
-        currentWeek += 1;
-      }
+  //     if (loopDate.getDay() === dayOfTheWeekNumber) {
+  //       currentWeek += 1;
+  //     }
 
-      if (loopDate.getTime() === checkDateTime) {
-        return currentWeek;
-      }
-    }
-  };
+  //     if (loopDate.getTime() === checkDateTime) {
+  //       return currentWeek;
+  //     }
+  //   }
+  // };
 
   const getCurrentDate = () => {
     const { month } = monthsAndLength[now.getMonth()];
     const dayOfTheMonth = now.getDate();
     const dayOfTheWeekNumber = now.getDay();
     const dayOfTheWeekName = daysOfTheWeek[dayOfTheWeekNumber];
-    const weekOfTheMonth = getWeekOfTheMonth(dayOfTheWeekNumber, dayOfTheMonth);
+    // const weekOfTheMonth = getWeekOfTheMonth(dayOfTheWeekNumber, dayOfTheMonth);
 
     return {
-      month, dayOfTheMonth, dayOfTheWeekNumber, dayOfTheWeekName, weekOfTheMonth,
+      month, dayOfTheMonth, dayOfTheWeekNumber, dayOfTheWeekName, /* weekOfTheMonth */
     };
   };
 
@@ -76,150 +76,150 @@ function Calendar({ user, actions, navigation }
   const calendarDaysBackgroundColor: { [x: string]: string; }[] = [];
 
   const generateCalendar = () => {
-    if (currentDate.weekOfTheMonth === 1 || currentDate.weekOfTheMonth === 3) {
-      const arrayOfMonths: number[] = [];
-      const firstMonthNumber = now.getMonth();
-      let monthNumber = firstMonthNumber;
-      for (let i = 0; i < 3; i += 1) {
-        if (firstMonthNumber < 1) {
-          monthNumber = firstMonthNumber + 12 + i;
-          arrayOfMonths.push(firstMonthNumber + 12 + i);
-        } else if (monthNumber > 11) {
-          arrayOfMonths.push(firstMonthNumber - 12 + i);
-        } else {
-          monthNumber = firstMonthNumber + i;
-          arrayOfMonths.push(firstMonthNumber + i);
-        }
-      }
-
-      arrayOfMonths.forEach((month: number) => {
-        let firstMonday = false;
-        let lastSunday = false;
-        let lastMonthSundays = 0;
-        for (let i = 1; i < monthsAndLength[month - 1].length + 1; i += 1) {
-          const dt = new Date(`${monthsAndLength[month - 1].month} ${i}, 2020 23:15:00`);
-          if (arrayOfMonths[0] === month && !firstMonday) {
-            if (dt.getDay() === 1) {
-              days.push({ day: i, month: monthsAndLength[month - 1].month });
-              firstMonday = true;
-            }
-          } else if (arrayOfMonths[arrayOfMonths.length - 1] === month && !lastSunday) {
-            if (dt.getDay() === 0) {
-              lastMonthSundays += 1;
-              if (lastMonthSundays === 4) {
-                lastSunday = true;
-                break;
-              }
-            }
-            days.push({ day: i, month: monthsAndLength[month - 1].month });
-          } else if (!lastSunday) {
-            days.push({ day: i, month: monthsAndLength[month - 1].month });
-          }
-        }
-      });
-
-      let firstDayOfFirstWeek = 0;
-      let lastDayOfFirstWeek = 7;
-      let firstDayOfLastWeek = 7;
-      let lastDayOfLastWeek = 14;
-      let newMonth;
-      for (let i = 0; i < days.length / 14; i += 1) {
-        const currentCalendarDays: Object[] = days
-          .slice(firstDayOfFirstWeek, lastDayOfLastWeek);
-        const goToNextMonth = currentCalendarDays[0].month
-        !== currentCalendarDays[currentCalendarDays.length - 1].month;
-
-        if (goToNextMonth) {
-          newMonth = currentCalendarDays
-            .filter((day, index, array) => array[array.length - 1].month === day.month);
-        }
-
-        let monthName: {};
-        if (newMonth && newMonth.length > 7) {
-          monthName = newMonth[0].month;
-        } else if (newMonth && newMonth.length === 7 && goToNextMonth) {
-          monthName = `${currentCalendarDays[0].month}/${newMonth[0].month}`;
-        } else {
-          monthName = currentCalendarDays[0].month;
-        }
-
-        const calendarDateWidth = width / 7;
-        const pressedCalendarDateWidthAndHeight = calendarDateWidth * 0.75;
-
-        calendar.push(
-          <View key={Math.random() * Date.now()}>
-            <View style={styles.header}>
-              <Text style={{ color: 'white', fontSize: 25 }}>
-                {monthName}
-              </Text>
-            </View>
-            <View style={{
-              flexDirection: 'row', width, height: 50, alignItems: 'center', marginTop: 70,
-            }}
-            >
-              {days.slice(firstDayOfFirstWeek, lastDayOfFirstWeek).map((day) => (
-                <TouchableWithoutFeedback
-                  key={Math.random() * Date.now()}
-                  onPress={() => {
-                    const previousMarkedDate = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
-                    setCalendarDayBackgroundColor({ ...calendarDayBackgroundColor, [`${previousMarkedDate}`]: 'rgb(58, 58, 58)', [`${monthName}${day.day}`]: 'black' });
-                  }}
-                >
-                  <View style={{
-                    backgroundColor: 'rgb(58, 58, 58)', width: calendarDateWidth, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, height: 50, borderRadius: 3, justifyContent: 'center', alignItems: 'center',
-                  }}
-                  >
-                    <Text style={{
-                      backgroundColor: calendarDayBackgroundColor ? calendarDayBackgroundColor[`${monthName}${day.day}`] : 'rgb(58, 58, 58)', width: pressedCalendarDateWidthAndHeight, height: pressedCalendarDateWidthAndHeight, borderRadius: pressedCalendarDateWidthAndHeight / 2, textAlign: 'center', lineHeight: pressedCalendarDateWidthAndHeight, color: 'white', fontSize: 20,
-                    }}
-                    >
-                      {day.day}
-                    </Text>
-                    <Text style={{ fontSize: 0 }}>
-                      {currentDate.month === monthName && currentDate.dayOfTheMonth === day.day ? calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'black' }) : calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'rgb(58, 58, 58)' })}
-                    </Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              ))}
-            </View>
-            <View style={{
-              flexDirection: 'row', width,
-            }}
-            >
-              {days.slice(firstDayOfLastWeek, lastDayOfLastWeek).map((day) => (
-                <TouchableWithoutFeedback
-                  key={Math.random() * Date.now()}
-                  onPress={() => {
-                    const previousWhiteDate = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
-                    setCalendarDayBackgroundColor({ ...calendarDayBackgroundColor, [`${previousWhiteDate}`]: 'rgb(58, 58, 58)', [`${monthName}${day.day}`]: 'black' });
-                  }}
-                >
-                  <View style={{
-                    backgroundColor: 'rgb(58, 58, 58)', width: calendarDateWidth, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, borderTopWidth: 0, height: 50, borderRadius: 3, justifyContent: 'center', alignItems: 'center',
-                  }}
-                  >
-                    <Text style={{
-                      backgroundColor: calendarDayBackgroundColor ? calendarDayBackgroundColor[`${monthName}${day.day}`] : 'rgb(58, 58, 58)', width: pressedCalendarDateWidthAndHeight, height: pressedCalendarDateWidthAndHeight, borderRadius: pressedCalendarDateWidthAndHeight / 2, textAlign: 'center', lineHeight: pressedCalendarDateWidthAndHeight, color: 'white', fontSize: 20,
-                    }}
-                    >
-                      {day.day}
-                    </Text>
-                    <Text style={{ fontSize: 0 }}>
-                      {currentDate.month === monthName && currentDate.dayOfTheMonth === day.day ? calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'black' }) : calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'rgb(58, 58, 58)' })}
-                    </Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              ))}
-            </View>
-          </View>
-          ,
-        );
-        firstDayOfFirstWeek += 14;
-        lastDayOfFirstWeek += 14;
-        firstDayOfLastWeek += 14;
-        lastDayOfLastWeek += 14;
+    const arrayOfMonths: number[] = [];
+    const firstMonthNumber = now.getMonth();
+    let monthNumber = firstMonthNumber;
+    for (let i = 0; i < 3; i += 1) {
+      if (!monthNumber) {
+        monthNumber = firstMonthNumber + 11;
+        arrayOfMonths.push(monthNumber);
+      } else if (monthNumber > 10) {
+        arrayOfMonths.push(monthNumber - 12 + i);
+      } else {
+        monthNumber = firstMonthNumber + i;
+        arrayOfMonths.push(monthNumber);
       }
     }
+
+    arrayOfMonths.forEach((month: number) => {
+      let firstMonday = false;
+      let lastSunday = false;
+      let lastMonthSundays = 0;
+
+      for (let i = 1; i < monthsAndLength[month].length + 1; i += 1) {
+        const dt = new Date(`${monthsAndLength[month].month} ${i}, 2020 23:15:00`);
+        if (arrayOfMonths[0] === month && !firstMonday) {
+          if (dt.getDay() === 1) {
+            days.push({ day: i, month: monthsAndLength[month].month });
+            firstMonday = true;
+          }
+        } else if (arrayOfMonths[arrayOfMonths.length - 1] === month && !lastSunday) {
+          if (dt.getDay() === 0) {
+            lastMonthSundays += 1;
+            if (lastMonthSundays === 4) {
+              lastSunday = true;
+              break;
+            }
+          }
+          days.push({ day: i, month: monthsAndLength[month].month });
+        } else if (!lastSunday) {
+          days.push({ day: i, month: monthsAndLength[month].month });
+        }
+      }
+    });
+
+    let firstDayOfFirstWeek = 0;
+    let lastDayOfFirstWeek = 7;
+    let firstDayOfLastWeek = 7;
+    let lastDayOfLastWeek = 14;
+    let newMonth;
+    for (let i = 0; i < days.length / 14; i += 1) {
+      const currentCalendarDays: Object[] = days
+        .slice(firstDayOfFirstWeek, lastDayOfLastWeek);
+      const goToNextMonth = currentCalendarDays[0].month
+        !== currentCalendarDays[currentCalendarDays.length - 1].month;
+
+      if (goToNextMonth) {
+        newMonth = currentCalendarDays
+          .filter((day, index, array) => array[array.length - 1].month === day.month);
+      }
+
+      let monthName: {};
+      if (newMonth && newMonth.length > 7) {
+        monthName = newMonth[0].month;
+      } else if (newMonth && newMonth.length === 7 && goToNextMonth) {
+        monthName = `${currentCalendarDays[0].month}/${newMonth[0].month}`;
+      } else {
+        monthName = currentCalendarDays[0].month;
+      }
+
+      const calendarDateWidth = width / 7;
+      const pressedCalendarDateWidthAndHeight = calendarDateWidth * 0.75;
+
+      calendar.push(
+        <View key={Math.random() * Date.now()}>
+          <View style={styles.header}>
+            <Text style={{ color: 'white', fontSize: 25 }}>
+              {monthName}
+            </Text>
+          </View>
+          <View style={{
+            flexDirection: 'row', width, height: 50, alignItems: 'center', marginTop: 70,
+          }}
+          >
+            {days.slice(firstDayOfFirstWeek, lastDayOfFirstWeek).map((day) => (
+              <TouchableWithoutFeedback
+                key={Math.random() * Date.now()}
+                onPress={() => {
+                  const previousMarkedDate = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
+                  setCalendarDayBackgroundColor({ ...calendarDayBackgroundColor, [`${previousMarkedDate}`]: 'rgb(58, 58, 58)', [`${monthName}${day.day}`]: 'black' });
+                }}
+              >
+                <View style={{
+                  backgroundColor: 'rgb(58, 58, 58)', width: calendarDateWidth, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, height: 50, borderRadius: 3, justifyContent: 'center', alignItems: 'center',
+                }}
+                >
+                  <Text style={{
+                    backgroundColor: calendarDayBackgroundColor ? calendarDayBackgroundColor[`${monthName}${day.day}`] : 'rgb(58, 58, 58)', width: pressedCalendarDateWidthAndHeight, height: pressedCalendarDateWidthAndHeight, borderRadius: pressedCalendarDateWidthAndHeight / 2, textAlign: 'center', lineHeight: pressedCalendarDateWidthAndHeight, color: 'white', fontSize: 20,
+                  }}
+                  >
+                    {day.day}
+                  </Text>
+                  <Text style={{ fontSize: 0 }}>
+                    {currentDate.month === monthName && currentDate.dayOfTheMonth === day.day ? calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'black' }) : calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'rgb(58, 58, 58)' })}
+                  </Text>
+                </View>
+              </TouchableWithoutFeedback>
+            ))}
+          </View>
+          <View style={{
+            flexDirection: 'row', width,
+          }}
+          >
+            {days.slice(firstDayOfLastWeek, lastDayOfLastWeek).map((day) => (
+              <TouchableWithoutFeedback
+                key={Math.random() * Date.now()}
+                onPress={() => {
+                  const previousWhiteDate = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
+                  setCalendarDayBackgroundColor({ ...calendarDayBackgroundColor, [`${previousWhiteDate}`]: 'rgb(58, 58, 58)', [`${monthName}${day.day}`]: 'black' });
+                }}
+              >
+                <View style={{
+                  backgroundColor: 'rgb(58, 58, 58)', width: calendarDateWidth, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, borderTopWidth: 0, height: 50, borderRadius: 3, justifyContent: 'center', alignItems: 'center',
+                }}
+                >
+                  <Text style={{
+                    backgroundColor: calendarDayBackgroundColor ? calendarDayBackgroundColor[`${monthName}${day.day}`] : 'rgb(58, 58, 58)', width: pressedCalendarDateWidthAndHeight, height: pressedCalendarDateWidthAndHeight, borderRadius: pressedCalendarDateWidthAndHeight / 2, textAlign: 'center', lineHeight: pressedCalendarDateWidthAndHeight, color: 'white', fontSize: 20,
+                  }}
+                  >
+                    {day.day}
+                  </Text>
+                  <Text style={{ fontSize: 0 }}>
+                    {currentDate.month === monthName && currentDate.dayOfTheMonth === day.day ? calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'black' }) : calendarDaysBackgroundColor.push({ [`${monthName}${day.day}`]: 'rgb(58, 58, 58)' })}
+                  </Text>
+                </View>
+              </TouchableWithoutFeedback>
+            ))}
+          </View>
+        </View>
+        ,
+      );
+      firstDayOfFirstWeek += 14;
+      lastDayOfFirstWeek += 14;
+      firstDayOfLastWeek += 14;
+      lastDayOfLastWeek += 14;
+    }
+    // }
   };
 
   useEffect(() => {
