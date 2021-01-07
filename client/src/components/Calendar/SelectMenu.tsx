@@ -84,6 +84,7 @@ const SelectMenu = ({
                   ? user.ownRecipes.map((recipe: Object) => (
                     <View
                       style={[styles.favoriteCard, { width: width - 30 }]}
+                      key={Math.random() * Date.now()}
                     >
                       {selectMenuSection && selectMenuSection[`${recipe.strMeal}`].addedTo
                         ? (

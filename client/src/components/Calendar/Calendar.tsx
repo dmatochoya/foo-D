@@ -178,24 +178,32 @@ function Calendar({ user, actions, navigation }
               {monthName}
             </Text>
           </View>
-          <View style={{
-            flexDirection: 'row', width, height: 50, alignItems: 'center', marginTop: 70,
-          }}
-          >
+          <View style={[styles.weekContainer, { width }]}>
             {firstWeek.daysArray.map((day) => (
               <TouchableWithoutFeedback
                 key={Math.random() * Date.now()}
                 onPress={() => {
-                  const previousMarkedDate = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
-                  setCalendarDayBackgroundColor({ ...calendarDayBackgroundColor, [`${previousMarkedDate}`]: 'rgb(58, 58, 58)', [`${monthName}${day.day}`]: 'black' });
+                  const previousMarkedDate = Object.keys(calendarDayBackgroundColor)
+                    .find((key) => calendarDayBackgroundColor[key] === 'black');
+                  setCalendarDayBackgroundColor({
+                    ...calendarDayBackgroundColor,
+                    [`${previousMarkedDate}`]: 'rgb(58, 58, 58)',
+                    [`${monthName}${day.day}`]: 'black',
+                  });
                 }}
               >
-                <View style={{
-                  backgroundColor: 'rgb(58, 58, 58)', width: calendarDateWidth, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, height: 50, borderRadius: 3, justifyContent: 'center', alignItems: 'center',
-                }}
-                >
+                <View style={[styles.dayWrapper, { width: calendarDateWidth }]}>
                   <Text style={{
-                    backgroundColor: calendarDayBackgroundColor ? calendarDayBackgroundColor[`${monthName}${day.day}`] : 'rgb(58, 58, 58)', width: selectedCalendarDateWidthAndHeight, height: selectedCalendarDateWidthAndHeight, borderRadius: selectedCalendarDateWidthAndHeight / 2, textAlign: 'center', lineHeight: selectedCalendarDateWidthAndHeight, color: 'white', fontSize: 20,
+                    backgroundColor: calendarDayBackgroundColor
+                      ? calendarDayBackgroundColor[`${monthName}${day.day}`]
+                      : 'rgb(58, 58, 58)',
+                    width: selectedCalendarDateWidthAndHeight,
+                    height: selectedCalendarDateWidthAndHeight,
+                    borderRadius: selectedCalendarDateWidthAndHeight / 2,
+                    lineHeight: selectedCalendarDateWidthAndHeight,
+                    textAlign: 'center',
+                    color: 'white',
+                    fontSize: 20,
                   }}
                   >
                     {day.day}
@@ -209,24 +217,31 @@ function Calendar({ user, actions, navigation }
               </TouchableWithoutFeedback>
             ))}
           </View>
-          <View style={{
-            flexDirection: 'row', width,
-          }}
-          >
+          <View style={{ flexDirection: 'row', width }}>
             {lastWeek.daysArray.map((day) => (
               <TouchableWithoutFeedback
                 key={Math.random() * Date.now()}
                 onPress={() => {
-                  const previousWhiteDate = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
-                  setCalendarDayBackgroundColor({ ...calendarDayBackgroundColor, [`${previousWhiteDate}`]: 'rgb(58, 58, 58)', [`${monthName}${day.day}`]: 'black' });
+                  const previousWhiteDate = Object.keys(calendarDayBackgroundColor)
+                    .find((key) => calendarDayBackgroundColor[key] === 'black');
+                  setCalendarDayBackgroundColor({
+                    ...calendarDayBackgroundColor,
+                    [`${previousWhiteDate}`]: 'rgb(58, 58, 58)',
+                    [`${monthName}${day.day}`]: 'black',
+                  });
                 }}
               >
-                <View style={{
-                  backgroundColor: 'rgb(58, 58, 58)', width: calendarDateWidth, borderColor: 'white', borderWidth: StyleSheet.hairlineWidth, borderTopWidth: 0, height: 50, borderRadius: 3, justifyContent: 'center', alignItems: 'center',
-                }}
-                >
+                <View style={[styles.dayWrapper, { width: calendarDateWidth }]}>
                   <Text style={{
-                    backgroundColor: calendarDayBackgroundColor ? calendarDayBackgroundColor[`${monthName}${day.day}`] : 'rgb(58, 58, 58)', width: selectedCalendarDateWidthAndHeight, height: selectedCalendarDateWidthAndHeight, borderRadius: selectedCalendarDateWidthAndHeight / 2, textAlign: 'center', lineHeight: selectedCalendarDateWidthAndHeight, color: 'white', fontSize: 20,
+                    backgroundColor: calendarDayBackgroundColor
+                      ? calendarDayBackgroundColor[`${monthName}${day.day}`] : 'rgb(58, 58, 58)',
+                    width: selectedCalendarDateWidthAndHeight,
+                    height: selectedCalendarDateWidthAndHeight,
+                    borderRadius: selectedCalendarDateWidthAndHeight / 2,
+                    lineHeight: selectedCalendarDateWidthAndHeight,
+                    textAlign: 'center',
+                    color: 'white',
+                    fontSize: 20,
                   }}
                   >
                     {day.day}
@@ -311,9 +326,7 @@ function Calendar({ user, actions, navigation }
           <>
             <View style={{ height: 20, borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth }} />
             <ScrollView
-              style={{
-                marginBottom: 210, paddingTop: 5,
-              }}
+              style={{ marginBottom: 210, paddingTop: 5 }}
               showsVerticalScrollIndicator={false}
             >
               <View style={{ paddingBottom: 40 }}>
@@ -334,22 +347,14 @@ function Calendar({ user, actions, navigation }
                                 style={[styles.menuCard, { flexDirection: 'row', width: width - 30, position: 'relative' }]}
                               >
                                 <Image
-                                  style={{
-                                    height: 100, width: 155, borderRadius: 5, marginRight: 15,
-                                  }}
+                                  style={styles.recipeImage}
                                   source={{
                                     uri: menuFound[Object.keys(menuFound)[0]][recipe]
                                       .recipe.strMealThumb,
                                   }}
                                 />
-                                <View style={{
-                                  flexGrow: 1, paddingRight: 15, justifyContent: 'center', flexDirection: 'row',
-                                }}
-                                >
-                                  <Text style={{
-                                    fontSize: 20, flex: 1, flexWrap: 'wrap', textAlign: 'center', marginTop: 5,
-                                  }}
-                                  >
+                                <View style={styles.recipeNameWrapper}>
+                                  <Text style={styles.recipeNameContainer}>
                                     {menuFound[Object.keys(menuFound)[0]][recipe].recipe.strMeal}
                                   </Text>
                                 </View>
@@ -366,19 +371,9 @@ function Calendar({ user, actions, navigation }
           : (
             <>
               <View style={{ alignItems: 'flex-end', padding: 20 }}>
-                <View style={{
-                  width: 74, height: 74, borderRadius: 37, backgroundColor: 'rgb(150, 89, 42)', alignItems: 'center', justifyContent: 'center', elevation: 5,
-                }}
-                >
+                <View style={styles.addMenuButtonContainer}>
                   <Text
-                    style={{
-                      fontSize: 70,
-                      fontFamily: 'serif',
-                      color: 'white',
-                      textShadowColor: 'black',
-                      textShadowOffset: { width: 1, height: 1 },
-                      textShadowRadius: 2,
-                    }}
+                    style={styles.addMenuButton}
                     onPress={() => {
                       actions.isUserSelectingMenu(true);
                       navigation.navigate('selectMenu', { date: dateMarked });
@@ -389,22 +384,14 @@ function Calendar({ user, actions, navigation }
                 </View>
               </View>
               <View style={{ alignItems: 'center' }}>
-                <Text style={{
-                  fontSize: 20, width: 240, textAlign: 'center', position: 'relative', top: 55, lineHeight: 30,
-                }}
-                >
+                <Text style={styles.addMenuText}>
                   No menu on this day. Add one!
                 </Text>
               </View>
-              <View style={{
-                position: 'relative', top: -100, alignItems: 'flex-end',
-              }}
-              >
+              <View style={{ position: 'relative', top: -100, alignItems: 'flex-end' }}>
                 <View style={{ transform: [{ rotate: '0deg' }], width: 60 }}>
                   <Image
-                    style={{
-                      width: 75, height: 85, position: 'relative', right: 130,
-                    }}
+                    style={styles.arrow}
                     source={{ uri: 'https://cdn.fastly.picmonkey.com/content4/previews/infodoodles/infodoodles_41_550.png' }}
                   />
                 </View>
