@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet, Text, View, StatusBar, Dimensions,
@@ -9,12 +8,14 @@ import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import styles from './CalendarStyles';
 import { isUserSelectingMenu } from '../../redux/actions/userActions';
+import {
+  Props, CalendarDayBackgroundColor, Week, UserReducer, Days,
+} from '../Interfaces/CalendarInterfaces';
 
 let swipeCalendarPosition = 0;
 let firstTimeEntering = true;
 
-function Calendar({ user, actions, navigation }
-  : { user: Object, actions: Object, navigation: Object}) {
+function Calendar({ user, actions, navigation } : Props) {
   const { width } = Dimensions.get('window');
   let currentPositionInCalendar = 2;
 
@@ -49,10 +50,12 @@ function Calendar({ user, actions, navigation }
   const currentDate = getCurrentDate();
 
   const calendar: JSX.Element[] = [];
-  const days: Object[] = [];
-  const [calendarDayBackgroundColor, setCalendarDayBackgroundColor] = useState<Object>({});
+  const days: Days[] = [];
+  const [
+    calendarDayBackgroundColor,
+    setCalendarDayBackgroundColor] = useState<CalendarDayBackgroundColor>({});
   const calendarDaysBackgroundColor: { [x: string]: string; }[] = [];
-  let initialPosition;
+  let initialPosition: number;
 
   const getCalendarMonthsNumbers = () => {
     const arrayOfMonths: number[] = [];
@@ -73,7 +76,7 @@ function Calendar({ user, actions, navigation }
     return arrayOfMonths;
   };
 
-  const getCalendarDays = (arrayOfMonths) => {
+  const getCalendarDays = (arrayOfMonths: number[]) => {
     arrayOfMonths.forEach((month: number) => {
       let firstMonday = false;
       let lastSunday = false;
@@ -116,20 +119,20 @@ function Calendar({ user, actions, navigation }
     const arrayOfMonths = getCalendarMonthsNumbers();
     getCalendarDays(arrayOfMonths);
 
-    const firstWeek = {
+    const firstWeek: Week = {
       firstDay: 0,
       lastDay: 7,
-      daysArray: null,
+      daysArray: [],
     };
-    const lastWeek = {
+    const lastWeek: Week = {
       firstDay: 7,
       lastDay: 14,
-      daysArray: null,
+      daysArray: [],
     };
-    let newMonth;
+    let newMonth: Days[];
 
     const determineMonthName = () => {
-      const currentCalendarDays: Object[] = days
+      const currentCalendarDays: Days[] = days
         .slice(firstWeek.firstDay, lastWeek.lastDay);
       const goToNextMonth = currentCalendarDays[0].month
         !== currentCalendarDays[currentCalendarDays.length - 1].month;
@@ -305,6 +308,7 @@ function Calendar({ user, actions, navigation }
 
   const dateMarked = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
   const menuFound = user.menus.find((menu: Object) => Object.keys(menu)[0] === dateMarked);
+  console.log(menuFound);
 
   return (
     <View style={{ marginTop: StatusBar.currentHeight }} testID="test">
@@ -403,7 +407,7 @@ function Calendar({ user, actions, navigation }
   );
 }
 
-function mapStateToProps({ userReducer }: {userReducer: Object}) {
+function mapStateToProps({ userReducer }: {userReducer: UserReducer}) {
   return {
     user: userReducer.user,
   };
