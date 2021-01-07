@@ -14,10 +14,10 @@ import {
 
 let swipeCalendarPosition = 0;
 let firstTimeEntering = true;
+let currentPositionInCalendar = 1;
 
 function Calendar({ user, actions, navigation } : Props) {
   const { width } = Dimensions.get('window');
-  let currentPositionInCalendar = 2;
 
   const now = new Date();
   const daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -308,7 +308,6 @@ function Calendar({ user, actions, navigation } : Props) {
 
   const dateMarked = Object.keys(calendarDayBackgroundColor).find((key) => calendarDayBackgroundColor[key] === 'black');
   const menuFound = user.menus.find((menu: Object) => Object.keys(menu)[0] === dateMarked);
-  console.log(menuFound);
 
   return (
     <View style={{ marginTop: StatusBar.currentHeight }} testID="test">

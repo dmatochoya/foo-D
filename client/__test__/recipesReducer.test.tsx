@@ -1,4 +1,4 @@
-import reducer from '../src/redux/reducers/recipesReducer';
+import reducer from '../src/redux/reducers/recipesReducerrrrr';
 import actionTypes from '../src/redux/actions/actionTypes';
 
 describe('recipesReducer', () => {

@@ -108,7 +108,7 @@ function Home({ recipes, actions, navigation }: Props) {
 
 function mapStateToProps({ recipesReducer } : { recipesReducer: object}) {
   return {
-    recipes: recipesReducer,
+    recipes: recipesReducer.recipes,
   };
 }
 

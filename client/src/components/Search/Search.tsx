@@ -91,10 +91,10 @@ function Search({ categories, actions, navigation } : Props) {
   );
 }
 
-function mapStateToProps({ recipeCategoriesReducer }
-  : { recipeCategoriesReducer: object}) {
+function mapStateToProps({ recipesReducer }
+  : { recipesReducer: Object}) {
   return {
-    categories: recipeCategoriesReducer,
+    categories: recipesReducer.recipeCategories,
   };
 }
 

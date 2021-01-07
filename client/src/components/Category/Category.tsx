@@ -115,11 +115,11 @@ function Category({
   );
 }
 
-function mapStateToProps({ categoryRecipesReducer, categoryRecipesByNameReducer }
-    : { categoryRecipesReducer: object, categoryRecipesByNameReducer : object}) {
+function mapStateToProps({ recipesReducer }
+    : { recipesReducer : Object}) {
   return {
-    recipes: categoryRecipesReducer,
-    categoryRecipes: categoryRecipesByNameReducer,
+    recipes: recipesReducer.categoryRecipes,
+    categoryRecipes: recipesReducer.categoryRecipesByName,
   };
 }
 
