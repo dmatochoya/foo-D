@@ -15,9 +15,9 @@ describe('categoryRecipesByNameReducer', () => {
     ).toEqual([{ name: 'lasgna', type: 'pasta' }, { name: 'Arrabiata', type: 'pasta' }]);
   });
 
-  it('should handle RESTORE_CATEGORY_RECIPE_BY_NAME_REDUCER', () => expect(
+  it('should handle RESTORE_CATEGORY_RECIPE_BY_NAME', () => expect(
     reducer([{ name: 'Arrabiata', type: 'pasta' }], {
-      type: actionTypes.RESTORE_CATEGORY_RECIPE_BY_NAME_REDUCER,
+      type: actionTypes.RESTORE_CATEGORY_RECIPE_BY_NAME,
     }),
   ).toEqual([]));
 });

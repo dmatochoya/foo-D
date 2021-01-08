@@ -15,10 +15,10 @@ describe('categoryRecipesReducer', () => {
     ).toEqual({ name: 'Arrabiata', type: 'pasta' });
   });
 
-  it('should handle RESTORE_CATEGORY_RECIPES_REDUCER', () => {
+  it('should handle RESTORE_CATEGORY_RECIPES', () => {
     expect(
       reducer({ name: 'Arrabiata', type: 'pasta' }, {
-        type: actionTypes.RESTORE_CATEGORY_RECIPES_REDUCER,
+        type: actionTypes.RESTORE_CATEGORY_RECIPES,
       }),
     ).toEqual({});
   });

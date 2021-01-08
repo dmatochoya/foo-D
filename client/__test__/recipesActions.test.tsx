@@ -160,7 +160,7 @@ describe('recipesActions', () => {
     store.dispatch(actions.restoreCategoryRecipesReducer());
 
     expect(store.getActions()).toEqual([{
-      type: actionTypes.RESTORE_CATEGORY_RECIPES_REDUCER,
+      type: actionTypes.RESTORE_CATEGORY_RECIPES,
     }]);
   });
 
@@ -168,7 +168,7 @@ describe('recipesActions', () => {
     store.dispatch(actions.restoreCategoryRecipeByNameReducer());
 
     expect(store.getActions()).toEqual([{
-      type: actionTypes.RESTORE_CATEGORY_RECIPE_BY_NAME_REDUCER,
+      type: actionTypes.RESTORE_CATEGORY_RECIPE_BY_NAME,
     }]);
   });
 });

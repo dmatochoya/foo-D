@@ -23,7 +23,7 @@ export function getRecipeFromAPI() {
 
 export function restoreCategoryRecipeByNameReducer() {
   return {
-    type: actionTypes.RESTORE_CATEGORY_RECIPE_BY_NAME_REDUCER,
+    type: actionTypes.RESTORE_CATEGORY_RECIPE_BY_NAME,
   };
 }
 
@@ -71,7 +71,7 @@ export function getRecipeByNameFromAPI(name: string, isCategorySearch: boolean) 
 
 export function restoreCategoryRecipesReducer() {
   return {
-    type: actionTypes.RESTORE_CATEGORY_RECIPES_REDUCER,
+    type: actionTypes.RESTORE_CATEGORY_RECIPES,
   };
 }
 
