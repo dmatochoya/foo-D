@@ -1,4 +1,3 @@
-// @ts-nocheck
 import reducer from '../src/redux/reducers/searchReducer';
 import actionTypes from '../src/redux/actions/actionTypes';
 

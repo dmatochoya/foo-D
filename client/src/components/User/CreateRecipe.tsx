@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import {
   View, BackHandler, Text, StatusBar, TextInput, Dimensions, ScrollView, Image,
@@ -94,10 +93,13 @@ const CreateRecipe = ({
                     <View style={{ alignItems: 'center' }}>
                       <TextInput
                         style={[styles.textInput, {
-                          height: section.textInputHeight, textAlignVertical: section.textAlignVertical,
+                          height: section.textInputHeight,
+                          textAlignVertical: section.textAlignVertical,
                         }]}
                         placeholder={`Add your recipe's ${section.name}`}
-                        onChangeText={(textChange) => setText({ ...text, [section.name]: textChange })}
+                        onChangeText={(textChange) => setText(
+                          { ...text, [section.name]: textChange },
+                        )}
                         defaultValue={text[section.name]}
                         multiline={section.multiline}
                         numberOfLines={section.numberOfLines}

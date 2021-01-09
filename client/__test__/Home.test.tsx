@@ -27,7 +27,7 @@ describe('Home', () => {
   };
 
   it('should render when searchComponent is defined', () => {
-    const initialState = { recipesReducer: [] };
+    const initialState = { recipesReducer: { recipes: [] } };
     wrapper = wrapperFactory(initialState);
     const { getByTestId } = render(<Home navigation={navigation} />, { wrapper });
     const searchComponent = getByTestId('homeComponent');
@@ -35,7 +35,7 @@ describe('Home', () => {
   });
 
   it('should call naviagtion.navigate when recipesRedcuer is an array with content', () => {
-    const initialState = { recipesReducer: [{ name: 'arrabiata' }] };
+    const initialState = { recipesReducer: { recipes: [{ name: 'arrabiata' }] } };
     wrapper = wrapperFactory(initialState);
     const { getByTestId } = render(<Home navigation={navigation} />, { wrapper });
     const navigateToDetail = getByTestId('navigateToDetail');
@@ -46,7 +46,7 @@ describe('Home', () => {
   });
 
   it('should call getRecipeFromAPI when goingdown is true', () => {
-    const initialState = { recipesReducer: [{ name: 'arrabiata' }] };
+    const initialState = { recipesReducer: { recipes: [{ name: 'arrabiata' }] } };
     wrapper = wrapperFactory(initialState);
     const { getByTestId } = render(<Home navigation={navigation} />, { wrapper });
     const infiniteScroll = getByTestId('infiniteScroll');
@@ -58,7 +58,7 @@ describe('Home', () => {
   });
 
   it('should not call getRecipeFromAPI when goingdown is false', () => {
-    const initialState = { recipesReducer: [{ name: 'arrabiata' }] };
+    const initialState = { recipesReducer: { recipes: [{ name: 'arrabiata' }] } };
     wrapper = wrapperFactory(initialState);
     const { getByTestId } = render(<Home navigation={navigation} />, { wrapper });
     const infiniteScroll = getByTestId('infiniteScroll');

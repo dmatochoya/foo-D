@@ -1,4 +1,3 @@
-// @ts-nocheck
 import 'react-native';
 import React, { FunctionComponent } from 'react';
 import configureStore from 'redux-mock-store';
@@ -16,7 +15,7 @@ describe('Search', () => {
   let navigation: object;
   let wrapper: FunctionComponent<any>;
   beforeEach(() => {
-    const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: { name: 'buns' } };
+    const initialState = { recipesReducer: { recipeCategories: { categories: [{ strCategory: 'pasta' }] } }, searchReducer: { name: 'buns' } };
 
     const store = buildStore(initialState);
     store.dispatch = jest.fn();

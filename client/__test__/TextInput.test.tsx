@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as React from 'react';
 import 'react-native';
 import configureStore from 'redux-mock-store';
@@ -32,7 +31,7 @@ describe('List', () => {
   });
 
   it("should change TextInput's value from empty string and, accordingly, onSubmitEdditing, call getRecipeByNameFromAPI", () => {
-    const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: { name: 'buns', status: 'not found' } };
+    const initialState = { /* recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, */ searchReducer: { name: 'buns', status: 'not found' } };
     wrapper = wrapperFactory(initialState);
 
     const { getByTestId } = render(<AddIngredientBoxInput navigation={navigation} />, { wrapper });
@@ -45,7 +44,7 @@ describe('List', () => {
   });
 
   it("should change TextInput's value to an empty string and, accordingly, onSubmitEdditing, not call getRecipeByNameFromAPI", () => {
-    const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: { name: 'buns', status: 'not found' } };
+    const initialState = { /* recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, */ searchReducer: { name: 'buns', status: 'not found' } };
     wrapper = wrapperFactory(initialState);
 
     const { getByTestId } = render(<AddIngredientBoxInput navigation={navigation} />, { wrapper });

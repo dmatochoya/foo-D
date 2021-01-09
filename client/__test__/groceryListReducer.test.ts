@@ -1,4 +1,3 @@
-// @ts-nocheck
 import reducer from '../src/redux/reducers/groceryListReducer';
 import actionTypes from '../src/redux/actions/actionTypes';
 

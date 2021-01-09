@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as React from 'react';
 import 'react-native';
 import configureStore from 'redux-mock-store';
@@ -34,7 +33,7 @@ describe('Search', () => {
 
   it("should change TextInput's value from empty string and, accordingly, onSubmitEdditing, call getRecipeByNameFromAPI", () => {
     jest.useFakeTimers();
-    const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: { name: 'buns', status: 'not found' } };
+    const initialState = { searchReducer: { name: 'buns', status: 'not found' }, noResults: true };
     wrapper = wrapperFactory(initialState);
     jest.runAllTimers();
 
@@ -51,7 +50,7 @@ describe('Search', () => {
   });
 
   it('should change placeholder text onFocus', () => {
-    const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: { name: 'buns', status: 'not found' } };
+    const initialState = { searchReducer: { name: 'buns', status: 'not found' }, noResults: true };
     wrapper = wrapperFactory(initialState);
 
     const { getByTestId } = render(<SearchBoxInput navigation={navigation} />, { wrapper });
@@ -60,7 +59,7 @@ describe('Search', () => {
   });
 
   it('should change placeholder text to No results when recipes has a length of 2', () => {
-    const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: { name: 'buns', status: 'not found' } };
+    const initialState = { searchReducer: { name: 'buns', status: 'not found' }, noResults: true };
     wrapper = wrapperFactory(initialState);
 
     const { getByTestId } = render(<SearchBoxInput navigation={navigation} />, { wrapper });
@@ -69,7 +68,7 @@ describe('Search', () => {
   });
 
   it('should call restoreSearchReducer when searchReducer has no length', () => {
-    const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: {} };
+    const initialState = { searchReducer: {}, noResults: true };
     wrapper = wrapperFactory(initialState);
 
     render(<SearchBoxInput navigation={navigation} />, { wrapper });
@@ -78,7 +77,7 @@ describe('Search', () => {
   });
 
   it('should not call getRecipeByNameFromAPI when, onSubmitEditing, text is falsy', () => {
-    const initialState = { recipeCategoriesReducer: { categories: [{ strCategory: 'pasta' }] }, searchReducer: {} };
+    const initialState = { searchReducer: {}, noResults: true };
     wrapper = wrapperFactory(initialState);
 
     const { getByTestId } = render(<SearchBoxInput navigation={navigation} />, { wrapper });

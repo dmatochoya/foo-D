@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,11 +11,15 @@ import Category from './src/components/Category/Category';
 import List from './src/components/List/List';
 import User from './src/components/User/User';
 import CreateRecipe from './src/components/User/CreateRecipe';
-// import CreateRecipe from './src/components/User/ImagePicker';
 import Calendar from './src/components/Calendar/Calendar';
 import SelectMenu from './src/components/Calendar/SelectMenu';
 import Navbar from './src/components/Navbar/Navbar';
 import { navigationRef } from './RootNavigation';
+
+interface UserReducer {
+  isUserLoggedIn: boolean
+  selectingMenu: boolean
+}
 
 const Stack = createStackNavigator();
 
@@ -50,7 +53,7 @@ function Navigation({ user, selectMenu } : { user: boolean, selectMenu: boolean 
 }
 
 function mapStateToProps({ userReducer }
-    : { userReducer: Object}) {
+    : { userReducer: UserReducer}) {
   return {
     user: userReducer.isUserLoggedIn,
     selectMenu: userReducer.selectingMenu,

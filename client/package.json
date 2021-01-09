@@ -7,7 +7,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watch --collect-coverage"
+    "test": "jest --watchAll --collect-coverage --no-cache"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.2.1",
@@ -89,6 +89,12 @@
     "preset": "jest-expo",
     "transform": {
       "\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
-    }
+    },
+    "coveragePathIgnorePatterns": [
+      "RootNavigation.ts",
+      "<rootDir>/src/redux/reducers/groceryListReducer.ts",
+      "<rootDir>/src/redux/configureStore.ts",
+      "<rootDir>/src/redux/reducers/index.ts"
+  ]
   }
 }

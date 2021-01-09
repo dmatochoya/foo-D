@@ -1,7 +1,6 @@
-// @ts-nocheck
 import React, { useRef, useState } from 'react';
 import {
-  StyleSheet, Text, Image, View, StatusBar, ScrollView,
+  Text, Image, View, StatusBar, ScrollView,
   Dimensions, TouchableWithoutFeedback, Animated,
 } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
@@ -11,90 +10,6 @@ import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import styles from './UserStyles';
 import { isUserLoggedIn, deleteFromFavoriteRecipes, isUserSelectingMenu } from '../../redux/actions/userActions';
-
-const stylese = StyleSheet.create({
-  headerWrapper: {
-    position: 'relative',
-    top: 0,
-    zIndex: 1,
-    width: '100%',
-    backgroundColor: 'rgb(230, 84, 84)',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  upperHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderBottomColor: 'black',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    paddingBottom: 15,
-  },
-  profilePicture: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-    marginRight: 10,
-  },
-  tabNavigator: {
-    borderBottomColor: 'white',
-    color: 'white',
-    fontSize: 18,
-  },
-  recipePhoto: {
-    height: 100,
-    width: 155,
-    borderRadius: 5,
-    marginRight: 15,
-  },
-  recipeNameContainer: {
-    flexGrow: 1,
-    paddingRight: 15,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  recipeName: {
-    fontSize: 20,
-    flex: 1,
-    flexWrap: 'wrap',
-    textAlign: 'center',
-    marginTop: 5,
-  },
-  arrowImage: {
-    width: 95,
-    height: 105,
-    position: 'absolute',
-    right: 10,
-    top: -122,
-    transform: [{ rotate: '-15deg' }],
-  },
-  addOneContainer: {
-    position: 'absolute',
-    top: 155,
-    right: -50,
-    width: 74,
-    height: 74,
-    borderRadius: 37,
-    backgroundColor: 'rgb(150, 89, 42)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 5,
-  },
-  favoriteCardContainer: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 10,
-  },
-  favoriteCard: {
-    borderRadius: 5,
-    backgroundColor: 'rgb(242, 242, 242)',
-    elevation: 5,
-    marginHorizontal: 10,
-    marginTop: 4,
-    marginBottom: 16,
-  },
-});
 
 function User({ user, actions, navigation }
   : { user: Object, actions: Object, navigation: Object}) {

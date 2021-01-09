@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { combineReducers } from 'redux';
 import recipesReducer from './recipesReducer';
 import searchReducer from './searchReducer';

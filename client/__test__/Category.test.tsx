@@ -28,15 +28,15 @@ describe('Category', () => {
   };
 
   it('should render when categoryComponent is defined', () => {
-    const initialState = { categoryRecipesReducer: { meals: [{ strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }] }, categoryRecipesByNameReducer: [] };
+    const initialState = { recipesReducer: { categoryRecipes: { meals: [{ strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }] }, categoryRecipesByName: { strMeal: 'arrabiata' } } };
     wrapper = wrapperFactory(initialState);
     const { getByTestId } = render(<Category navigation={navigation} route={route} />, { wrapper });
     const categoryComponent = getByTestId('categoryComponent');
     expect(categoryComponent).toBeDefined();
   });
 
-  it('should call naviagtion.navigate when categoryRecipesReducer is an object with content', () => {
-    const initialState = { categoryRecipesReducer: { meals: [{ strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }] }, categoryRecipesByNameReducer: [{ name: 'buns' }, { name: 'buns' }, { name: 'buns' }, { name: 'buns' }] };
+  it('should call naviagtion.navigate when categoryRecipes is an object with content', () => {
+    const initialState = { recipesReducer: { categoryRecipes: { meals: [{ strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }] }, categoryRecipesByName: [{ name: 'buns' }, { name: 'buns' }, { name: 'buns' }, { name: 'buns' }] } };
     wrapper = wrapperFactory(initialState);
     const { getByTestId } = render(<Category navigation={navigation} route={route} />, { wrapper });
     const navigateToDetail = getByTestId('navigateToDetail1');
@@ -47,7 +47,7 @@ describe('Category', () => {
   });
 
   it('should call getRecipeByNameFromAPI when goingdown is true', () => {
-    const initialState = { categoryRecipesReducer: { meals: [{ strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }] }, categoryRecipesByNameReducer: [{ name: 'arrabiata' }, { name: 'buns' }, { name: 'lasgna' }, { name: 'paella' }] };
+    const initialState = { recipesReducer: { categoryRecipes: { meals: [{ strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }] }, categoryRecipesByName: [{ name: 'arrabiata' }, { name: 'buns' }, { name: 'lasgna' }, { name: 'paella' }] } };
     wrapper = wrapperFactory(initialState);
     const { getByTestId } = render(<Category navigation={navigation} route={route} />, { wrapper });
     const infiniteScroll = getByTestId('infiniteScroll');
@@ -59,7 +59,7 @@ describe('Category', () => {
   });
 
   it('should not set categoryRecipeIndex to 0 when recipes.meals.length is higher than categoryRecipeIndex', () => {
-    const initialState = { categoryRecipesReducer: { meals: [{ strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }] }, categoryRecipesByNameReducer: [{ name: 'arrabiata' }, { name: 'buns' }, { name: 'lasgna' }, { name: 'paella' }] };
+    const initialState = { recipesReducer: { categoryRecipes: { meals: [{ strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }] }, categoryRecipesByName: [{ name: 'arrabiata' }, { name: 'buns' }, { name: 'lasgna' }, { name: 'paella' }] } };
     wrapper = wrapperFactory(initialState);
     const { getByTestId } = render(<Category navigation={navigation} route={route} />, { wrapper });
     const infiniteScroll = getByTestId('infiniteScroll');
@@ -70,8 +70,8 @@ describe('Category', () => {
     expect(getRecipeByNameFromAPI).toHaveBeenCalled();
   });
 
-  it('should not call getRecipeByNameFromAPI when categoryRecipesReducer is an object without content', () => {
-    const initialState = { categoryRecipesReducer: {}, categoryRecipesByNameReducer: [{ name: 'arrabiata' }, { name: 'buns' }, { name: 'lasgna' }, { name: 'paella' }] };
+  it('should not call getRecipeByNameFromAPI when categoryRecipes is an object without content', () => {
+    const initialState = { recipesReducer: { categoryRecipes: {}, categoryRecipesByName: [{ name: 'arrabiata' }, { name: 'buns' }, { name: 'lasgna' }, { name: 'paella' }] } };
     wrapper = wrapperFactory(initialState);
     const { getByTestId } = render(<Category navigation={navigation} route={route} />, { wrapper });
     const infiniteScroll = getByTestId('infiniteScroll');
@@ -82,7 +82,7 @@ describe('Category', () => {
   });
 
   it('should not call getRecipeByNameFromAPI when goingdown is false', () => {
-    const initialState = { categoryRecipesReducer: { meals: [{ strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }] }, categoryRecipesByNameReducer: [{ name: 'arrabiata' }, { name: 'buns' }, { name: 'lasgna' }, { name: 'paella' }] };
+    const initialState = { recipesReducer: { categoryRecipes: { meals: [{ strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }, { strMeal: 'arrabiata' }] }, categoryRecipesByName: [{ name: 'arrabiata' }, { name: 'buns' }, { name: 'lasgna' }, { name: 'paella' }] } };
     wrapper = wrapperFactory(initialState);
     const { getByTestId } = render(<Category navigation={navigation} route={route} />, { wrapper });
     const infiniteScroll = getByTestId('infiniteScroll');

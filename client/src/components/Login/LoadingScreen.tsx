@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect } from 'react';
 import {
   StyleSheet, View, ActivityIndicator, StatusBar,

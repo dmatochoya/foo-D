@@ -1,4 +1,16 @@
-export default function recipesReducer(state = { recipes: [] }, action: { type: string; recipe: Object; }) {
+interface Recipe {
+  meals: Object[]
+}
+
+interface State {
+  recipes: []
+  categoryRecipesByName: [] | Object[]
+  categoryRecipes?: Object
+}
+
+export default function recipesReducer(state: State = { recipes: [], categoryRecipesByName: [] },
+  action: { type: string; recipe?: Recipe; categories?: Object;
+    categoryRecipes?: Object; }) {
   switch (action.type) {
     case 'GET_RECIPE':
       return { ...state, recipes: [...state.recipes, action.recipe.meals[0]] };
