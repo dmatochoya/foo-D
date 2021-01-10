@@ -11,7 +11,6 @@ import { getRecipeFromAPI } from '../../redux/actions/recipesActions';
 import { isUserSelectingMenu } from '../../redux/actions/userActions';
 
 function Home({ recipes, actions, navigation }: Props) {
-  actions.isUserSelectingMenu(false);
   const { height } = Dimensions.get('window');
 
   const recipePhotoHeight = +(height - 114).toFixed();
@@ -70,6 +69,10 @@ function Home({ recipes, actions, navigation }: Props) {
     }
   }, []);
 
+  useEffect(() => {
+    actions.isUserSelectingMenu(false);
+  }, []);
+
   return (
     <View style={{ marginTop: StatusBar.currentHeight }} testID="homeComponent">
       <StatusBar backgroundColor="black" barStyle="light-content" translucent />
@@ -105,7 +108,8 @@ function Home({ recipes, actions, navigation }: Props) {
   );
 }
 
-function mapStateToProps({ recipesReducer } : { recipesReducer: object}) {
+function mapStateToProps({ recipesReducer } :
+  { recipesReducer: {recipes: {strMealThumb: string, strMeal: string}[]}}) {
   return {
     recipes: recipesReducer.recipes,
   };

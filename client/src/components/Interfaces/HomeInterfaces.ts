@@ -3,13 +3,18 @@ interface Recipe {
     strMeal: string
 }
 
+interface Actions {
+    getRecipeFromAPI(): void
+    isUserSelectingMenu(boolean: boolean): void
+}
+
 interface Navigation {
     navigate(route: string, data: object): void
 }
 
 interface Props {
     recipes: Array<Recipe>
-    actions: Object
+    actions: Actions
     navigation: Navigation
 }
 
