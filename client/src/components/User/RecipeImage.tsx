@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 
 interface ImageInterface {
     uri: string
@@ -10,9 +10,11 @@ interface ImageInterface {
 export default function RecipeImage({ route: { params: { image } } }
   : {route: {params: {image: ImageInterface}}}) {
   return (
-    <Image
-      source={{ uri: image }}
-      style={{ width: undefined, height: '100%', aspectRatio: 1 }}
-    />
+    <View style={{alignItems: 'center'}}>
+      <Image
+        source={{ uri: image }}
+        style={{ width: undefined, height: '100%', aspectRatio: 1 }}
+      />
+    </View>
   );
 }
