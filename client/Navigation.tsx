@@ -25,7 +25,6 @@ interface UserReducer {
 const Stack = createStackNavigator();
 
 function Navigation({ user, selectMenu } : { user: boolean, selectMenu: boolean }) {
-  console.log(selectMenu);
   return (
     <>
       <NavigationContainer ref={navigationRef}>
