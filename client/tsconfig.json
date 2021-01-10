@@ -8,9 +8,5 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "strict": true,
-  },
-  "include": ["src"],
-  "exclude": [
-    "src/components/Calendar/Calendar.tsx"
-  ]
+  }
 }
