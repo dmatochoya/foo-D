@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
-  View, BackHandler, Text, StatusBar, TextInput, Dimensions, ScrollView, Image,
+  View, BackHandler, Text, StatusBar, TextInput, Dimensions, ScrollView,
 } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import Props from '../Interfaces/CreateRecipeInterfaces';
+import { Props, RecipeSections } from '../Interfaces/CreateRecipeInterfaces';
 import styles from './CreateRecipeStyles';
 import { isUserSelectingMenu, addOwnRecipe } from '../../redux/actions/userActions';
 
@@ -14,15 +15,17 @@ const CreateRecipe = ({
   user, actions, navigation,
 } : Props) => {
   const { width, height } = Dimensions.get('window');
-  const [text, setText] = useState({
+  const [text, setText] = useState<{[key: string]: string}>({
     title: '', photo: '', ingredients: '', steps: '',
   });
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<null | string>(null);
 
   const mockRecipe = () => {
     const arrayOfIngredientsAndMeasure = text.ingredients.split('.')
       .map((ingredient) => ingredient.split(',').map((item) => item.trim()));
-    const recipe = { strMeal: text.title, strInstructions: text.steps, strMealThumb: text.photo };
+    const recipe: {[key: string]: string | null} = {
+      strMeal: text.title, strInstructions: text.steps, strMealThumb: image,
+    };
 
     arrayOfIngredientsAndMeasure.forEach((ingredient, ingredientIndex) => {
       recipe[`strIngredient${ingredientIndex + 1}`] = ingredient[0];
@@ -41,27 +44,27 @@ const CreateRecipe = ({
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
   };
-  console.log(image);
+
+  const focused = useIsFocused();
   useEffect(() => {
-    const goBackAndShowNavbar = (): void => {
-      actions.isUserSelectingMenu(false);
-    };
+    if (focused) {
+      const goBackAndShowNavbar = ()
+      : boolean | null | undefined => actions.isUserSelectingMenu(false);
 
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      goBackAndShowNavbar,
-    );
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        goBackAndShowNavbar,
+      );
 
-    return () => backHandler.remove();
-  }, []);
+      return () => backHandler.remove();
+    }
+  }, [focused]);
 
-  const recipeSections = [
+  const recipeSections: RecipeSections[] = [
     {
       name: 'title', multiline: false, numberOfLines: 1, textInputHeight: 40, textAlignVertical: 'center',
     },
@@ -84,7 +87,7 @@ const CreateRecipe = ({
         <ScrollView style={{ marginBottom: 50 }}>
           <View style={{ paddingBottom: 10 }}>
             {recipeSections.map((section) => (
-              <View key={Math.random() * Date.now()}>
+              <>
                 <Text style={styles.recipeSectionTitle}>
                   {section.name.toUpperCase()}
                 </Text>
@@ -107,32 +110,46 @@ const CreateRecipe = ({
                     </View>
                   )
                   : (
-                    <View style={{
-                      alignItems: 'center',
-                      paddingHorizontal: 7,
-                      marginVertical: 22,
-                    }}
-                    >
-                      <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        width: '90%',
-                      }}
-                      >
+                    <View style={styles.photoSectionWrapper}>
+                      <View style={styles.photoSectionContainer}>
                         {!image
                           ? (
                             <>
-                              <Text style={{ fontSize: 17, color: 'rgba(0, 0, 0, 0.4)', marginRight: 7 }}>Add your recipe's photo: </Text>
+                              <Text style={{ fontSize: 17, color: 'rgba(0, 0, 0, 0.4)', marginRight: 7 }}>
+                                Add your recipe's photo:
+                              </Text>
                               <Icon size={30} name="md-photos" type="ionicon" onPress={() => pickImage()} />
                             </>
                           )
-                          : <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-                          /* <Text onPress={() => Linking.openURL('/data/user/0/host.exp.exponent/cache/ExperienceData/%2540davidmato%252Fclient/ImagePicker/66c89bf0-600a-4d24-909a-3a8a11678a7f.jpg')}>{image}</Text>} */
-                          }
+                          : (
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+                              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Icon
+                                  size={30}
+                                  name="md-image"
+                                  color="rgb(43, 102, 237)"
+                                  type="ionicon"
+                                  onPress={() => navigation.navigate('recipeImage', { image })}
+                                />
+                                <Text
+                                  style={styles.photoFileName}
+                                  onPress={() => navigation.navigate('recipeImage', { image })}
+                                >
+                                  {image.slice(-20)}
+                                </Text>
+                              </View>
+                              <Icon
+                                size={30}
+                                name="md-trash"
+                                type="ionicon"
+                                onPress={() => setImage(null)}
+                              />
+                            </View>
+                          )}
                       </View>
                     </View>
                   )}
-              </View>
+              </>
             ))}
           </View>
         </ScrollView>
@@ -152,7 +169,7 @@ const CreateRecipe = ({
 };
 
 function mapStateToProps({ userReducer }
-    : { userReducer: Object}) {
+    : { userReducer: {user: Object}}) {
   return {
     user: userReducer.user,
   };

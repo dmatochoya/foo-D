@@ -11,6 +11,7 @@ import Category from './src/components/Category/Category';
 import List from './src/components/List/List';
 import User from './src/components/User/User';
 import CreateRecipe from './src/components/User/CreateRecipe';
+import RecipeImage from './src/components/User/RecipeImage';
 import Calendar from './src/components/Calendar/Calendar';
 import SelectMenu from './src/components/Calendar/SelectMenu';
 import Navbar from './src/components/Navbar/Navbar';
@@ -24,6 +25,7 @@ interface UserReducer {
 const Stack = createStackNavigator();
 
 function Navigation({ user, selectMenu } : { user: boolean, selectMenu: boolean }) {
+  console.log(selectMenu);
   return (
     <>
       <NavigationContainer ref={navigationRef}>
@@ -43,6 +45,7 @@ function Navigation({ user, selectMenu } : { user: boolean, selectMenu: boolean 
           <Stack.Screen name="list" component={List} options={{ headerShown: false }} />
           <Stack.Screen name="person" component={User} options={{ headerShown: false }} />
           <Stack.Screen name="createRecipe" component={CreateRecipe} options={{ headerShown: false }} />
+          <Stack.Screen name="recipeImage" component={RecipeImage} options={{ headerShown: false }} />
           <Stack.Screen name="calendar" component={Calendar} options={{ headerShown: false }} />
           <Stack.Screen name="selectMenu" component={SelectMenu} options={{ headerShown: false }} />
         </Stack.Navigator>

@@ -60,6 +60,22 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 16,
   },
+  photoSectionWrapper: {
+    alignItems: 'center',
+    paddingHorizontal: 7,
+    marginVertical: 22,
+  },
+  photoSectionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '90%',
+  },
+  photoFileName: {
+    fontSize: 17,
+    color: 'rgb(43, 102, 237)',
+    marginLeft: 7,
+    textDecorationLine: 'underline',
+  },
 });
 
 export default styles;

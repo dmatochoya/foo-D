@@ -97,8 +97,17 @@ function LoginScreen({ actions } : { actions: Object}) {
 
   return (
     <View style={[styles.container, { backgroundColor: 'rgb(230, 84, 84)' }]}>
+      <Image
+        style={{
+          width: 250, height: 250, position: 'relative', top: '-5%',
+        }}
+        source={require('../../../assets/appLogo.png')}
+      />
       <Pressable
-        style={({ pressed }) => [styles.loginButton, { borderWidth: pressed ? 1 : 0 }]}
+        style={({ pressed }) => [
+          styles.loginButton,
+          { borderWidth: pressed ? 1 : StyleSheet.hairlineWidth },
+        ]}
         onPress={() => signInWithGoogleAsync()}
       >
         <>

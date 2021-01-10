@@ -36,5 +36,6 @@ module.exports = {
     'prefer-destructuring': 'off',
     'no-return-assign': 'off',
     'no-loop-func': 'off',
+    'react/no-unescaped-entities': 'off',
   },
 };
