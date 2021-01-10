@@ -6,7 +6,7 @@ import { LogBox } from 'react-native';
 import Navigation from './Navigation';
 import configureStore from './src/redux/configureStore';
 import { getRecipeCategoriesFromAPI } from './src/redux/actions/recipesActions';
-import firebaseConfig from './config';
+import firebaseConfig from './config/config';
 
 const store = configureStore({});
 
