@@ -52,8 +52,10 @@ const CreateRecipe = ({
   const focused = useIsFocused();
   useEffect(() => {
     if (focused) {
-      const goBackAndShowNavbar = ()
-      : boolean | null | undefined => actions.isUserSelectingMenu(false);
+      const goBackAndShowNavbar = (): null => {
+        actions.isUserSelectingMenu(false);
+        return null;
+      };
 
       const backHandler = BackHandler.addEventListener(
         'hardwareBackPress',
