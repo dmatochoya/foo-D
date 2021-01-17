@@ -1,3 +1,4 @@
+// @ts-nocheck
 const { Schema, model } = require('mongoose');
 
 const productSchema = new Schema({

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState, useRef } from 'react';
 import {
   View, BackHandler, Text, StatusBar, Image, Dimensions, ScrollView, Animated,

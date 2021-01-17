@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useRef, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import {
