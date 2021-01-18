@@ -9,8 +9,6 @@ import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { isUserLoggedIn, postUserInDB, getUserFromDB } from '../../redux/actions/userActions';
 
-const googleLogo = require('../../../assets/googleLogo.png');
-
 interface ProviderData {
   providerId: string
   uid: string
