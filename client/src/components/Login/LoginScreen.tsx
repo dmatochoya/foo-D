@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import {
   StyleSheet, View, Image, Text, Pressable,
@@ -111,8 +112,10 @@ function LoginScreen({ actions } : { actions: Object}) {
         onPress={() => signInWithGoogleAsync()}
       >
         <>
-          <Image style={{ width: 50, height: 50, marginRight: 7 }} source={googleLogo} />
-          <Text style={{ fontSize: 17 }}>Sign in with Google</Text>
+          <Image 
+            style={{ width: 50, height: 50, marginRight: 7 }} 
+            source={{uri: "https://img.icons8.com/fluent/48/000000/google-logo.png"}} />
+            <Text style={{ fontSize: 17 }}>Sign in with Google</Text>
         </>
       </Pressable>
     </View>
