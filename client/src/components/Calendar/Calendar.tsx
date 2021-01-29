@@ -15,7 +15,7 @@ import {
 
 let swipeCalendarPosition = 0;
 let firstTimeEntering = true;
-let currentPositionInCalendar = 1;
+let currentPositionInCalendar = 2;
 
 function Calendar({ user, actions, navigation } : Props) {
   const { width } = Dimensions.get('window');
