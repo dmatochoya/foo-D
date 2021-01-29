@@ -39,6 +39,7 @@ function recipesController() {
       case 'Boulangère Potatoes':
         name = 'Boulang';
         return;
+      default:
     }
 
     const recipeUrl = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
@@ -61,7 +62,7 @@ function recipesController() {
   }
 
   async function getCategoryRecipes(req, res) {
-    const { params: {name}} = req;
+    const { params: { name } } = req;
     const categoryRecipesUrl = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
     try {
       const { data } = await axiosRecipes.get(`${categoryRecipesUrl}${name}`);
@@ -75,7 +76,7 @@ function recipesController() {
     getRandomRecipe,
     getRecipeByName,
     getRecipeCategories,
-    getCategoryRecipes
+    getCategoryRecipes,
   };
 }
 

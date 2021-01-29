@@ -1,12 +1,12 @@
-const UserModel = require('../models/userModel');
-const userControllerTest = require('./userController')(UserModel);
+const UserModel = require('../models/userModel.ts');
+const userControllerTest = require('./userController.ts')(UserModel);
 
 jest.mock('../models/userModel');
 
 describe('userController', () => {
   afterEach(() => {
     UserModel.mockRestore();
-    });
+  });
 
   describe('getMethod', () => {
     test('should call res.send when there is an error', () => {
@@ -15,11 +15,11 @@ describe('userController', () => {
       };
       const req = {
         query: {
-          product: null
-        }
-    }
+          product: null,
+        },
+      };
 
-    UserModel.find.mockImplementationOnce((query, callback) => {
+      UserModel.find.mockImplementationOnce((query, callback) => {
         callback(true, {});
       });
       userControllerTest.getMethod(req, res);
@@ -33,10 +33,10 @@ describe('userController', () => {
         setHeader: jest.fn(),
       };
       const req = {
-          query: {
-            product: null
-          }
-      }
+        query: {
+          product: null,
+        },
+      };
 
       UserModel.find.mockImplementationOnce((query, callback) => {
         callback(false, {});
@@ -54,9 +54,9 @@ describe('userController', () => {
       };
       const req = {
         body: {
-          query: null
-        }
-      }
+          query: null,
+        },
+      };
 
       UserModel.create.mockImplementationOnce((query, callback) => {
         callback(true, {});
@@ -71,10 +71,10 @@ describe('userController', () => {
         json: jest.fn(),
       };
       const req = {
-          body: {
-            query: null
-          }
-      }
+        body: {
+          query: null,
+        },
+      };
 
       UserModel.create.mockImplementationOnce((query, callback) => {
         callback(false, {});
@@ -92,11 +92,11 @@ describe('userController', () => {
       };
       const req = {
         body: {
-            user: {
-                favoriteRecipes: []
-            }
-        }
-      }
+          user: {
+            favoriteRecipes: [],
+          },
+        },
+      };
 
       UserModel.findOneAndUpdate.mockImplementationOnce((query, update, added, callback) => {
         callback(true, {});
@@ -112,11 +112,11 @@ describe('userController', () => {
       };
       const req = {
         body: {
-            user: {
-                favoriteRecipes: []
-            }
-        }
-      }
+          user: {
+            favoriteRecipes: [],
+          },
+        },
+      };
 
       UserModel.findOneAndUpdate.mockImplementationOnce((query, update, added, callback) => {
         callback(false, null, null, {});
@@ -134,14 +134,14 @@ describe('userController', () => {
       };
       const req = {
         body: {
-            user: {
-                favoriteRecipes: [ { strMeal: null } ]
-            },
-            recipe: {
-                strMeal: null
-            }
-        }
-      }
+          user: {
+            favoriteRecipes: [{ strMeal: null }],
+          },
+          recipe: {
+            strMeal: null,
+          },
+        },
+      };
 
       UserModel.findOneAndUpdate.mockImplementationOnce((query, update, added, callback) => {
         callback(true, {});
@@ -157,11 +157,11 @@ describe('userController', () => {
       };
       const req = {
         body: {
-            user: {
-                favoriteRecipes: []
-            }
-        }
-      }
+          user: {
+            favoriteRecipes: [],
+          },
+        },
+      };
 
       UserModel.findOneAndUpdate.mockImplementationOnce((query, update, added, callback) => {
         callback(false, null, null, {});
@@ -179,11 +179,11 @@ describe('userController', () => {
       };
       const req = {
         body: {
-            user: {
-                id: null
-            }
-        }
-      }
+          user: {
+            id: null,
+          },
+        },
+      };
 
       UserModel.findOneAndUpdate.mockImplementationOnce((query, update, added, callback) => {
         callback(true, {});
@@ -199,11 +199,11 @@ describe('userController', () => {
       };
       const req = {
         body: {
-            user: {
-                id: null
-            }
-        }
-      }
+          user: {
+            id: null,
+          },
+        },
+      };
 
       UserModel.findOneAndUpdate.mockImplementationOnce((query, update, added, callback) => {
         callback(false, null, null, {});
@@ -221,11 +221,11 @@ describe('userController', () => {
       };
       const req = {
         body: {
-            user: {
-                id: null
-            }
-        }
-      }
+          user: {
+            id: null,
+          },
+        },
+      };
 
       UserModel.findOneAndUpdate.mockImplementationOnce((query, update, added, callback) => {
         callback(true, {});
@@ -241,11 +241,11 @@ describe('userController', () => {
       };
       const req = {
         body: {
-            user: {
-                id: null
-            }
-        }
-      }
+          user: {
+            id: null,
+          },
+        },
+      };
 
       UserModel.findOneAndUpdate.mockImplementationOnce((query, update, added, callback) => {
         callback(false, {});
@@ -263,11 +263,11 @@ describe('userController', () => {
       };
       const req = {
         body: {
-            user: {
-                id: null
-            }
-        }
-      }
+          user: {
+            id: null,
+          },
+        },
+      };
 
       UserModel.findOneAndUpdate.mockImplementationOnce((query, update, added, callback) => {
         callback(true, {});
@@ -283,11 +283,11 @@ describe('userController', () => {
       };
       const req = {
         body: {
-            user: {
-                id: null
-            }
-        }
-      }
+          user: {
+            id: null,
+          },
+        },
+      };
 
       UserModel.findOneAndUpdate.mockImplementationOnce((query, update, added, callback) => {
         callback(false, {});

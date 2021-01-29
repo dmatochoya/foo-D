@@ -1,6 +1,6 @@
-export {}
+export {};
 const { Router } = require('express');
-const groceryListController = require('../controllers/groceryListController');
+const groceryListController = require('../controllers/groceryListController.ts');
 
 function groceryListRouter(ProductModel) {
   const router = Router();
