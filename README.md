@@ -8,6 +8,7 @@ foo-D, a full-stack project done in 2.5 weeks, is a React Native app where you c
 * Redux
 * TypeScript
 * Jest
+* Node.js
 * MongoDB
 * Mongoose
 * Express
