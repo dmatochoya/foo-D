@@ -1,7 +1,7 @@
 import axios from 'axios';
 import actionTypes from './actionTypes';
 
-const recipesUrl = 'http://192.168.0.17:2000/recipes';
+const recipesUrl = 'http://192.168.0.17:19000/recipes';
 
 export function getRecipeFromAPISuccess(recipe: object) {
   return {
