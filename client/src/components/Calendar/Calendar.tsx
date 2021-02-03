@@ -142,6 +142,7 @@ function Calendar({ user, actions, navigation } : Props) {
         newMonth = currentCalendarDays
           .filter((day, index, array) => array[array.length - 1].month === day.month);
       }
+      console.log(goToNextMonth);
 
       let monthName: {};
       if (newMonth && newMonth.length > 7) {
