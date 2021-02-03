@@ -1,12 +1,10 @@
 const axios = require('axios');
-const recipesControllerTest = require('./recipesController')();
+const recipesControllerTest = require('./recipesController.ts')();
 
 jest.mock('axios');
 
 describe('recipesController', () => {
-  afterEach(() =>
-      axios.mockRestore()
-  )
+  afterEach(() => axios.mockRestore());
 
   describe('getRandomRecipe', () => {
     test('should call res.send when there is an error', async () => {
@@ -40,9 +38,9 @@ describe('recipesController', () => {
       };
       const req = {
         params: {
-          name: null
-        }
-      }
+          name: null,
+        },
+      };
 
       axios.get.mockImplementationOnce(() => Promise.reject());
       await recipesControllerTest.getRecipeByName(req, res);
@@ -56,9 +54,9 @@ describe('recipesController', () => {
       };
       const req = {
         params: {
-          name: null
-        }
-      }
+          name: null,
+        },
+      };
       const response = {};
 
       axios.get.mockImplementationOnce(() => Promise.resolve(response));
@@ -68,27 +66,27 @@ describe('recipesController', () => {
     });
 
     [
-      {initialState: 'Provençal Omelette Cake', finalState: 'Omelette Cake'},
-      {initialState: 'Gołąbki (cabbage roll)', finalState: 'cabbage roll'},
-      {initialState: 'Vegetable Shepherd’s Pie', finalState: 'Vegetable Shepherd'},
-      {initialState: 'Rosół (Polish Chicken Soup)', finalState: 'Polish Chicken Soup'},
-      {initialState: 'Polskie Naleśniki (Polish Pancakes)', finalState: 'Polish Pancakes'},
-      {initialState: 'Seafood fideuà', finalState: 'Seafood'},
-      {initialState: 'Sledz w Oleju (Polish Herrings)', finalState: 'Polish Herrings'},
-      {initialState: 'Boulangère Potatoes', finalState: 'Boulang'}
+      { initialState: 'Provençal Omelette Cake', finalState: 'Omelette Cake' },
+      { initialState: 'Gołąbki (cabbage roll)', finalState: 'cabbage roll' },
+      { initialState: 'Vegetable Shepherd’s Pie', finalState: 'Vegetable Shepherd' },
+      { initialState: 'Rosół (Polish Chicken Soup)', finalState: 'Polish Chicken Soup' },
+      { initialState: 'Polskie Naleśniki (Polish Pancakes)', finalState: 'Polish Pancakes' },
+      { initialState: 'Seafood fideuà', finalState: 'Seafood' },
+      { initialState: 'Sledz w Oleju (Polish Herrings)', finalState: 'Polish Herrings' },
+      { initialState: 'Boulangère Potatoes', finalState: 'Boulang' },
     ].forEach((_) => {
       test(`should reassign ${_.initialState} to ${_.finalState}`, async () => {
         const req = {
           params: {
-            name: _.initialState
-          }
-        }
-        
+            name: _.initialState,
+          },
+        };
+
         recipesControllerTest.getRecipeByName(req, null);
 
         expect(req.params.name).toBe(_.initialState);
       });
-    })
+    });
   });
 
   describe('getRecipeCategories', () => {
@@ -115,7 +113,7 @@ describe('recipesController', () => {
       expect(res.send).toHaveBeenCalled();
     });
   });
-  
+
   describe('getCategoryRecipes', () => {
     test('should call res.send when there is an error', async () => {
       const res = {
@@ -123,9 +121,9 @@ describe('recipesController', () => {
       };
       const req = {
         params: {
-          name: null
-        }
-      }
+          name: null,
+        },
+      };
 
       axios.get.mockImplementationOnce(() => Promise.reject());
       await recipesControllerTest.getCategoryRecipes(req, res);
@@ -139,9 +137,9 @@ describe('recipesController', () => {
       };
       const req = {
         params: {
-          name: null
-        }
-      }
+          name: null,
+        },
+      };
       const response = {};
 
       axios.get.mockImplementationOnce(() => Promise.resolve(response));

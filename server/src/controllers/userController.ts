@@ -1,80 +1,84 @@
 function userController(User) {
-    function getMethod(req, res) {
-        const {query: { product } } = req;
-        function findCallback(error, user) {
-          return error ? res.send(error) : res.json(user);
-        }
-    
-        User.find({product}, findCallback);
+  function getMethod(req, res) {
+    const { query: { product } } = req;
+    function findCallback(error, user) {
+      return error ? res.send(error) : res.json(user);
     }
 
-    function postMethod(req, res) {
-        const { body: { query } } = req;
-        function findCallback(error, userSaved) {
-        return error ? res.send(error) : res.json(userSaved);
-        }
+    User.find({ product }, findCallback);
+  }
 
-        User.create(query, findCallback);
+  function postMethod(req, res) {
+    const { body: { query } } = req;
+    function findCallback(error, userSaved) {
+      return error ? res.send(error) : res.json(userSaved);
     }
 
-    function putFavoriteRecipe(req, res) {
-        const {body} = req;
-        const update = {...body.user, favoriteRecipes: [...body.user.favoriteRecipes, body.recipe ]};
-        function callback(error, updatedUser) {
-            return error ? res.send(error) : res.send(updatedUser);
-        }
+    User.create(query, findCallback);
+  }
 
-        User.findOneAndUpdate(
-            body.user, update, { new: true }, callback,
-        );
+  function putFavoriteRecipe(req, res) {
+    const { body } = req;
+    const update = { ...body.user, favoriteRecipes: [...body.user.favoriteRecipes, body.recipe] };
+    function callback(error, updatedUser) {
+      return error ? res.send(error) : res.send(updatedUser);
     }
 
-    function deleteFavoriteRecipe(req, res) {
-        const {body} = req;
-        const update = {...body.user, favoriteRecipes: body.user.favoriteRecipes.filter((favoriteRecipe) => favoriteRecipe.strMeal !== body.recipe.strMeal)};
-        function callback(error, updatedUser) {
-            return error ? res.send(error) : res.send(updatedUser);
-        }
+    User.findOneAndUpdate(
+      body.user, update, { new: true }, callback,
+    );
+  }
 
-        User.findOneAndUpdate(
-            body.user, update, { new: true }, callback,
-        );
+  function deleteFavoriteRecipe(req, res) {
+    const { body } = req;
+    const update = {
+      ...body.user,
+      favoriteRecipes: body.user.favoriteRecipes
+        .filter((favoriteRecipe) => favoriteRecipe.strMeal !== body.recipe.strMeal),
+    };
+    function callback(error, updatedUser) {
+      return error ? res.send(error) : res.send(updatedUser);
     }
 
-    function putListItem(req, res) {
-        const {body} = req;
-        const update = {...body.user, groceryList: body.groceryList};
+    User.findOneAndUpdate(
+      body.user, update, { new: true }, callback,
+    );
+  }
 
-        function callback(error, updatedUser) {
-            return error ? res.send(error) : res.send(updatedUser);
-        }
+  function putListItem(req, res) {
+    const { body } = req;
+    const update = { ...body.user, groceryList: body.groceryList };
 
-        User.findOneAndUpdate(
-            body.user.id, update, { new: true }, callback,
-        );
+    function callback(error, updatedUser) {
+      return error ? res.send(error) : res.send(updatedUser);
     }
 
-    function putMenu(req, res) {
-        const {body} = req;
-        function callback(error, updatedMenu) {
-            return error ? res.send(error) : res.send(updatedMenu);
-        }
+    User.findOneAndUpdate(
+      body.user.id, update, { new: true }, callback,
+    );
+  }
 
-        User.findOneAndUpdate(
-            body.user.id, body.user, { new: true }, callback,
-        );
+  function putMenu(req, res) {
+    const { body } = req;
+    function callback(error, updatedMenu) {
+      return error ? res.send(error) : res.send(updatedMenu);
     }
 
-    function putOwnRecipe(req, res) {
-        const {body} = req;
-        function callback(error, updatedUser) {
-            return error ? res.send(error) : res.send(updatedUser);
-        }
+    User.findOneAndUpdate(
+      body.user.id, body.user, { new: true }, callback,
+    );
+  }
 
-        User.findOneAndUpdate(
-            body.user.id, body.user, { new: true }, callback,
-        );
+  function putOwnRecipe(req, res) {
+    const { body } = req;
+    function callback(error, updatedUser) {
+      return error ? res.send(error) : res.send(updatedUser);
     }
+
+    User.findOneAndUpdate(
+      body.user.id, body.user, { new: true }, callback,
+    );
+  }
 
   return {
     getMethod,
@@ -83,7 +87,7 @@ function userController(User) {
     deleteFavoriteRecipe,
     putListItem,
     putMenu,
-    putOwnRecipe
+    putOwnRecipe,
   };
 }
 

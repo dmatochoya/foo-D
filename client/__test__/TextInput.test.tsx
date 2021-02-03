@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as React from 'react';
 import 'react-native';
 import configureStore from 'redux-mock-store';

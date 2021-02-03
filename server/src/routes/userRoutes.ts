@@ -1,6 +1,6 @@
-export {}
+export {};
 const { Router } = require('express');
-const userController = require('../controllers/userController');
+const userController = require('../controllers/userController.ts');
 
 function userRouter(User) {
   const router = Router();
@@ -15,13 +15,13 @@ function userRouter(User) {
     .delete(user.deleteFavoriteRecipe);
 
   router.route('/list')
-    .put(user.putListItem)
+    .put(user.putListItem);
 
   router.route('/menu')
-    .put(user.putMenu)
+    .put(user.putMenu);
 
   router.route('/myrecipes')
-    .put(user.putOwnRecipe)
+    .put(user.putOwnRecipe);
 
   return router;
 }

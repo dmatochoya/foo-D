@@ -20,7 +20,6 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/react-native": "^7.1.0",
-    "@types/jest": "^26.0.16",
     "@types/react-native-calendars": "^1.505.0",
     "@types/react-redux": "^7.1.11",
     "@types/react-router-dom": "^5.1.6",
@@ -71,6 +70,7 @@
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
+    "@types/jest": "^26.0.20",
     "@types/react": "~16.9.35",
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "~0.63.2",
@@ -95,6 +95,6 @@
       "<rootDir>/src/redux/reducers/groceryListReducer.ts",
       "<rootDir>/src/redux/configureStore.ts",
       "<rootDir>/src/redux/reducers/index.ts"
-  ]
+    ]
   }
 }

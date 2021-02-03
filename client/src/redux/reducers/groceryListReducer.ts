@@ -1,3 +1,4 @@
+// @ts-nocheck
 interface IObjectKeys {
   [key: string]: string | number | boolean | Object;
 }

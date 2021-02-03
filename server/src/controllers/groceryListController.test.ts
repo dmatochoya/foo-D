@@ -1,12 +1,12 @@
-const ProductModel = require('../models/productModel');
-const groceryListControllerTest = require('./groceryListController')(ProductModel);
+const ProductModel = require('../models/productModel.ts');
+const groceryListControllerTest = require('./groceryListController.ts')(ProductModel);
 
 jest.mock('../models/productModel');
 
 describe('groceryListController', () => {
   afterEach(() => {
-      ProductModel.mockRestore();
-    });
+    ProductModel.mockRestore();
+  });
 
   describe('getMethod', () => {
     test('should call res.send when there is an error', () => {
@@ -15,9 +15,9 @@ describe('groceryListController', () => {
       };
       const req = {
         query: {
-          product: null
-        }
-    }
+          product: null,
+        },
+      };
 
       ProductModel.find.mockImplementationOnce((query, callback) => {
         callback(true, {});
@@ -33,10 +33,10 @@ describe('groceryListController', () => {
         setHeader: jest.fn(),
       };
       const req = {
-          query: {
-            product: null
-          }
-      }
+        query: {
+          product: null,
+        },
+      };
 
       ProductModel.find.mockImplementationOnce((query, callback) => {
         callback(false, {});

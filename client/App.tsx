@@ -1,3 +1,4 @@
+// @ts-nocheck
 import 'react-native-gesture-handler';
 import React from 'react';
 import { Provider as ReduxProvider } from 'react-redux';

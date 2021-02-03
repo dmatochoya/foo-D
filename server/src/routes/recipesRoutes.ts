@@ -1,6 +1,6 @@
-export {}
+export {};
 const { Router } = require('express');
-const recipesController = require('../controllers/recipesController');
+const recipesController = require('../controllers/recipesController.ts');
 
 function recipesRouter() {
   const router = Router();
@@ -10,13 +10,13 @@ function recipesRouter() {
     .get(recipes.getRandomRecipe);
 
   router.route('/categories')
-    .get(recipes.getRecipeCategories)
-    
+    .get(recipes.getRecipeCategories);
+
   router.route('/categories/:name')
-    .get(recipes.getCategoryRecipes)
+    .get(recipes.getCategoryRecipes);
 
   router.route('/:name')
-    .get(recipes.getRecipeByName)
+    .get(recipes.getRecipeByName);
 
   return router;
 }

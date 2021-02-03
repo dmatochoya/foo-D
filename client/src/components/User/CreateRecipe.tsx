@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import {
   View, BackHandler, Text, StatusBar, TextInput, Dimensions, ScrollView,
@@ -89,7 +90,7 @@ const CreateRecipe = ({
         <ScrollView style={{ marginBottom: 50 }}>
           <View style={{ paddingBottom: 10 }}>
             {recipeSections.map((section) => (
-              <>
+              <View key={Math.random() * Date.now()}>
                 <Text style={styles.recipeSectionTitle}>
                   {section.name.toUpperCase()}
                 </Text>
@@ -151,7 +152,7 @@ const CreateRecipe = ({
                       </View>
                     </View>
                   )}
-              </>
+              </View>
             ))}
           </View>
         </ScrollView>

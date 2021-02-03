@@ -1,13 +1,13 @@
-export {}
+export {};
 const express = require('express');
 const bodyParser = require('body-parser');
 const { connect } = require('mongoose');
 const cors = require('cors');
-const ProductModel = require('./src/models/productModel')
-const userModel = require('./src/models/userModel')
-const recipesRoutes = require('./src/routes/recipesRoutes')();
-const groceryListRoutes = require('./src/routes/groceryListRoutes')(ProductModel);
-const userRoutes = require('./src/routes/userRoutes')(userModel);
+const ProductModel = require('./src/models/productModel.ts');
+const userModel = require('./src/models/userModel.ts');
+const recipesRoutes = require('./src/routes/recipesRoutes.ts')();
+const groceryListRoutes = require('./src/routes/groceryListRoutes.ts')(ProductModel);
+const userRoutes = require('./src/routes/userRoutes.ts')(userModel);
 
 const app = express();
 app.use(cors());

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import 'react-native';
 import React, { FunctionComponent } from 'react';
 import configureStore from 'redux-mock-store';
